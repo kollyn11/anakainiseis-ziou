@@ -60,6 +60,22 @@ const fontCss = faces
       `@font-face{font-family:'Commissioner';font-style:normal;font-display:swap;font-weight:${weight};src:url(${src}) format('woff2');unicode-range:${range}}`,
   )
   .join('');
+
+// Metric-matched fallback: Arial scaled to Commissioner's proportions, so text
+// does not reflow (layout shift) when the web font arrives. Values measured from
+// the font files over typical Greek copy.
+const fallbacks: [number, string, string, string, string][] = [
+  [400, 'Arial', '105.3%', '96.6%', '19.6%'],
+  [500, 'Arial', '106.3%', '95.7%', '19.4%'],
+  [700, 'Arial Bold', '99.1%', '102.6%', '20.8%'],
+  [800, 'Arial Bold', '100.5%', '101.2%', '20.5%'],
+];
+const fallbackCss = fallbacks
+  .map(
+    ([weight, local, size, ascent, descent]) =>
+      `@font-face{font-family:'Commissioner Fallback';font-weight:${weight};src:local('${local}'),local('${local.replace(' ', '-')}'),local('Helvetica');size-adjust:${size};ascent-override:${ascent};descent-override:${descent};line-gap-override:0%}`,
+  )
+  .join('');
 ---
 
 <!doctype html>
@@ -74,7 +90,7 @@ const fontCss = faces
 
     <link rel="preload" href={greek800} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={greek400} as="font" type="font/woff2" crossorigin />
-    <style set:html={fontCss}></style>
+    <style set:html={fontCss + fallbackCss}></style>
     <script is:inline>document.documentElement.classList.add('js');</script>
 
     <meta name="theme-color" content="#14325C" />

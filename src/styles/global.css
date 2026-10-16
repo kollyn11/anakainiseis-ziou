@@ -20,7 +20,7 @@
   --error: #a3261b;              /* 6.6:1 on white */
 
   /* Type */
-  --font: 'Commissioner', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font: 'Commissioner', 'Commissioner Fallback', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --fs-body: 1.125rem;           /* 18px */
   --fs-small: 0.9375rem;
   --fs-h1: clamp(2.75rem, 1.6rem + 5.4vw, 5.75rem);
