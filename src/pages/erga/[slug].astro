@@ -1,0 +1,224 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import { Picture, getImage } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Gallery from '../../components/Gallery.astro';
+import BeforeAfter from '../../components/BeforeAfter.astro';
+import Icon from '../../components/Icon.astro';
+import { getProjects } from '../../lib/projects';
+import { site } from '../../config/site';
+import { businessId, breadcrumbSchema, graph, abs } from '../../lib/schema';
+
+export const getStaticPaths = (async () => {
+  const projects = await getProjects();
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}) satisfies GetStaticPaths;
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const p = project.data;
+const path = `/erga/${project.id}/`;
+const dateLabel = new Intl.DateTimeFormat('el-GR', { month: 'long', year: 'numeric' }).format(p.date);
+
+// Social preview uses the project's cover instead of the generic OG image.
+const og = await getImage({ src: p.cover, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+
+const galleryImages = [{ image: p.cover, alt: p.coverAlt }, ...p.gallery];
+const galleryUrls = await Promise.all(
+  galleryImages.map(async (g) => abs((await getImage({ src: g.image, width: 1600, format: 'webp' })).src)),
+);
+
+const jsonLd = graph(
+  {
+    '@type': ['CreativeWork', 'ImageGallery'],
+    '@id': abs(path),
+    name: p.title,
+    description: p.summary,
+    url: abs(path),
+    inLanguage: 'el-GR',
+    dateCreated: p.date.toISOString().slice(0, 10),
+    locationCreated: { '@type': 'Place', name: p.location },
+    keywords: p.services.join(', '),
+    creator: { '@id': businessId },
+    image: galleryImages.map((g, i) => ({
+      '@type': 'ImageObject',
+      contentUrl: galleryUrls[i],
+      caption: g.alt,
+    })),
+  },
+  breadcrumbSchema([
+    { name: 'Αρχική', path: '/' },
+    { name: 'Έργα', path: '/erga/' },
+    { name: p.title, path },
+  ]),
+);
+---
+
+<Base
+  title={`${p.title} | ${site.name}`}
+  description={p.summary}
+  path={path}
+  ogImage={og.src}
+  ogType="article"
+  jsonLd={jsonLd}
+>
+  <PageHeader
+    title={p.title}
+    crumbs={[{ name: 'Αρχική', href: '/' }, { name: 'Έργα', href: '/erga/' }, { name: p.title }]}
+  >
+    <ul role="list" class="facts">
+      <li><Icon name="pin" size={20} /> {p.location}</li>
+      <li><time datetime={p.date.toISOString().slice(0, 10)}>{dateLabel}</time></li>
+      {p.services.map((s) => <li class="facts__tag">{s}</li>)}
+    </ul>
+  </PageHeader>
+
+  <article class="section project">
+    <div class="container project__grid">
+      <div class="project__cover">
+        <Picture
+          src={p.cover}
+          alt={p.coverAlt}
+          formats={['avif', 'webp']}
+          widths={[640, 960, 1280, 1600]}
+          sizes="(min-width: 76rem) 46rem, 100vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+      <div class="project__text">
+        <p class="project__summary">{p.summary}</p>
+        <div class="prose">
+          <Content />
+        </div>
+      </div>
+    </div>
+
+    {
+      p.before && p.after && (
+        <div class="container project__block">
+          <h2>Πριν και μετά</h2>
+          <BeforeAfter before={p.before} after={p.after} alt={p.beforeAfterAlt ?? p.title} />
+        </div>
+      )
+    }
+
+    {
+      galleryImages.length > 1 && (
+        <div class="container project__block">
+          <h2>Φωτογραφίες</h2>
+          <Gallery images={galleryImages} />
+        </div>
+      )
+    }
+
+    <div class="container project__block project__cta">
+      <p>Θέλετε κάτι αντίστοιχο στον δικό σας χώρο;</p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="/#contact">Ζητήστε δωρεάν προσφορά <Icon name="arrow" /></a>
+        <a class="btn btn--secondary" href="/erga/"><Icon name="arrowLeft" /> Όλα τα έργα</a>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    margin-top: var(--s-1);
+    color: var(--white);
+    font-weight: 500;
+  }
+
+  .facts li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .facts :global(svg) {
+    color: var(--orange);
+  }
+
+  .facts__tag {
+    padding: 0.15rem 0.6rem;
+    border: 1px solid rgb(255 255 255 / 0.35);
+    border-radius: var(--radius);
+    font-size: 0.9375rem;
+  }
+
+  .project__grid {
+    display: grid;
+    gap: var(--s-4);
+  }
+
+  @media (min-width: 64rem) {
+    .project__grid {
+      grid-template-columns: 3fr 2fr;
+      gap: var(--s-5);
+      align-items: start;
+    }
+  }
+
+  .project__cover :global(img) {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+  }
+
+  .project__text {
+    display: grid;
+    gap: var(--s-3);
+  }
+
+  .project__summary {
+    color: var(--navy);
+    font-size: 1.3125rem;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  .prose :global(p + p) {
+    margin-top: 1em;
+  }
+
+  .prose :global(h2),
+  .prose :global(h3) {
+    margin: 1.5em 0 0.5em;
+    font-size: 1.375rem;
+  }
+
+  .prose :global(ul) {
+    padding-left: 1.2em;
+  }
+
+  .prose :global(li::marker) {
+    color: var(--orange);
+  }
+
+  .project__block {
+    display: grid;
+    gap: var(--s-3);
+    margin-top: var(--s-6);
+  }
+
+  .project__block h2 {
+    font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+  }
+
+  .project__cta {
+    padding-top: var(--s-4);
+    border-top: 2px solid var(--navy);
+  }
+
+  .project__cta p {
+    color: var(--navy);
+    font-size: clamp(1.25rem, 1rem + 1vw, 1.625rem);
+    font-weight: 700;
+  }
+</style>

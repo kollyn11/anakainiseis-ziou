@@ -1,0 +1,100 @@
+---
+interface Props {
+  title: string;
+  lead?: string;
+  crumbs?: { name: string; href?: string }[];
+}
+const { title, lead, crumbs = [] } = Astro.props;
+---
+
+<section class="ph on-navy">
+  <div class="container ph__inner">
+    {
+      crumbs.length > 0 && (
+        <nav aria-label="Διαδρομή" class="ph__crumbs">
+          <ol role="list">
+            {crumbs.map((c) => (
+              <li>{c.href ? <a href={c.href}>{c.name}</a> : <span aria-current="page">{c.name}</span>}</li>
+            ))}
+          </ol>
+        </nav>
+      )
+    }
+    <h1>{title}</h1>
+    {lead && <p class="ph__lead">{lead}</p>}
+    <slot />
+  </div>
+  <div class="ph__band" aria-hidden="true"></div>
+</section>
+
+<style>
+  .ph {
+    position: relative;
+    overflow: hidden;
+    background: var(--navy);
+    color: var(--navy-ink-soft);
+  }
+
+  .ph::before {
+    content: '';
+    position: absolute;
+    right: -4rem;
+    bottom: -6rem;
+    width: 22rem;
+    height: 22rem;
+    border-top: 10px solid rgb(232 102 43 / 0.9);
+    border-left: 10px solid rgb(232 102 43 / 0.9);
+    transform: rotate(45deg);
+    opacity: 0.85;
+  }
+
+  .ph__inner {
+    position: relative;
+    display: grid;
+    gap: var(--s-2);
+    padding-block: var(--s-6) var(--s-5);
+  }
+
+  .ph h1 {
+    max-width: 22ch;
+    color: var(--white);
+    font-size: clamp(2.25rem, 1.6rem + 3vw, 4rem);
+  }
+
+  .ph__lead {
+    max-width: 40rem;
+    font-size: 1.1875rem;
+  }
+
+  .ph__crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .ph__crumbs li + li::before {
+    content: '/';
+    margin-right: 0.5rem;
+    color: var(--orange);
+  }
+
+  .ph__crumbs a {
+    color: var(--white);
+  }
+
+  .ph__band {
+    height: 6px;
+    background: var(--orange);
+  }
+
+  @media (max-width: 47.99rem) {
+    .ph::before {
+      width: 12rem;
+      height: 12rem;
+      right: -3rem;
+      bottom: -4rem;
+      opacity: 0.5;
+    }
+  }
+</style>

@@ -1,0 +1,59 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import ProjectsEmpty from './ProjectsEmpty.astro';
+import Icon from './Icon.astro';
+import { getProjects } from '../lib/projects';
+
+const all = await getProjects();
+const shown = all.slice(0, 6);
+---
+
+<section id="projects" class="section section--sand-dark" aria-labelledby="projects-title">
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <h2 id="projects-title">Έργα</h2>
+      <span class="rule" aria-hidden="true"></span>
+      <p>Ανακαινίσεις, χρωματισμοί και μονώσεις που έχουμε παραδώσει στην Αττική.</p>
+    </header>
+
+    {
+      shown.length === 0 ? (
+        <ProjectsEmpty />
+      ) : (
+        <>
+          <ul role="list" class="projects-grid">
+            {shown.map((project, i) => (
+              <li data-reveal>
+                <ProjectCard project={project} />
+              </li>
+            ))}
+          </ul>
+          {all.length > 0 && (
+            <p class="projects-more">
+              <a class="btn btn--secondary" href="/erga/">
+                Όλα τα έργα
+                <Icon name="arrow" />
+              </a>
+            </p>
+          )}
+        </>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .projects-grid {
+    display: grid;
+    gap: var(--s-3);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+  }
+
+  .projects-grid > li {
+    display: grid;
+  }
+
+  .projects-more {
+    margin-top: var(--s-5);
+  }
+</style>

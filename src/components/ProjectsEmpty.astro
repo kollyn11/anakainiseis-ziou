@@ -1,0 +1,86 @@
+---
+import Icon from './Icon.astro';
+import LogoIcon from './LogoIcon.astro';
+import { site } from '../config/site';
+---
+
+<div class="empty">
+  <div class="empty__frame" aria-hidden="true">
+    <span class="empty__corner empty__corner--tl"></span>
+    <span class="empty__corner empty__corner--tr"></span>
+    <span class="empty__corner empty__corner--bl"></span>
+    <span class="empty__corner empty__corner--br"></span>
+    <LogoIcon size={72} />
+  </div>
+  <div class="empty__text">
+    <p class="empty__title">Τα πρώτα μας έργα ανεβαίνουν σύντομα</p>
+    <p>Μέχρι τότε, δείτε τη δουλειά μας από κοντά στο Instagram.</p>
+    <a class="btn btn--secondary" href={site.instagram.url} rel="noopener" target="_blank">
+      <Icon name="instagram" />
+      @{site.instagram.handle}
+      <span class="visually-hidden">(ανοίγει σε νέα καρτέλα)</span>
+    </a>
+  </div>
+</div>
+
+<style>
+  .empty {
+    display: grid;
+    gap: var(--s-4);
+    align-items: center;
+    padding: var(--s-4);
+    background: var(--white);
+    border-radius: var(--radius);
+  }
+
+  @media (min-width: 48rem) {
+    .empty {
+      grid-template-columns: minmax(14rem, 22rem) 1fr;
+      gap: var(--s-5);
+      padding: var(--s-4) var(--s-5) var(--s-4) var(--s-4);
+    }
+  }
+
+  /* A framed, waiting "photo" — crop marks around the brand mark */
+  .empty__frame {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 3;
+    background:
+      repeating-linear-gradient(-45deg, transparent 0 14px, rgb(20 50 92 / 0.045) 14px 15px),
+      var(--sand);
+  }
+
+  .empty__corner {
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-color: var(--orange);
+    border-style: solid;
+    border-width: 0;
+  }
+
+  .empty__corner--tl { top: 0.75rem; left: 0.75rem; border-top-width: 3px; border-left-width: 3px; }
+  .empty__corner--tr { top: 0.75rem; right: 0.75rem; border-top-width: 3px; border-right-width: 3px; }
+  .empty__corner--bl { bottom: 0.75rem; left: 0.75rem; border-bottom-width: 3px; border-left-width: 3px; }
+  .empty__corner--br { bottom: 0.75rem; right: 0.75rem; border-bottom-width: 3px; border-right-width: 3px; }
+
+  .empty__text {
+    display: grid;
+    justify-items: start;
+    gap: var(--s-2);
+  }
+
+  .empty__title {
+    color: var(--navy);
+    font-size: clamp(1.375rem, 1.1rem + 1vw, 1.75rem);
+    font-weight: 700;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  .empty__text .btn {
+    margin-top: var(--s-1);
+  }
+</style>
