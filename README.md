@@ -16,7 +16,8 @@ npm install
 npm run dev       # http://localhost:4321
 npm run build     # static output in dist/
 npm run preview   # serve dist/ locally
-npm run icons     # regenerate favicon / app icons / og-image.png from the brand SVGs
+npm run logo      # rebuild the vector logo (src/assets/brand/logo-*.svg) from scripts/build-logo.mjs
+npm run icons     # regenerate favicon / app icons / og-image.png from the vector logo
 ```
 
 ## Where things live
@@ -26,8 +27,8 @@ npm run icons     # regenerate favicon / app icons / og-image.png from the brand
 | **All business data** (name, phone, email, Instagram, areas, canonical URL, owner TODOs) | `src/config/site.ts` — the only place to edit it |
 | Services (names + descriptions) | `src/data/services.ts` |
 | FAQ (also emitted as FAQPage JSON-LD) | `src/data/faq.ts` |
-| Brand colours, type, buttons | `src/styles/global.css` |
-| Logo SVGs (do not redraw) | `src/assets/brand/`, components `LogoIcon`, `Wordmark`, `Lockup` |
+| Brand colours (black / white / grey), type, buttons | `src/styles/global.css` |
+| Logo (vector redraw of the client logo; original JPG in `src/assets/brand/source/`) | `src/assets/brand/logo-runner.svg`, `logo-full.svg`; components `Logo`, `Lockup` |
 | Projects (content collection) | `src/content/projects/<folder>/index.md` + photos; schema in `src/content.config.ts` |
 | CMS config (generated from `site.ts`) | `src/pages/admin/config.yml.ts`, UI at `public/admin/index.html` |
 | JSON-LD builders | `src/lib/schema.ts` |

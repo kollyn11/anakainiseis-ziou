@@ -31,7 +31,7 @@ A hands-on craftsman, not an agency: the person who quotes is the person who doe
 
 ## Brand Commitments
 
-Brand board is binding: navy #14325C, orange #E8662B, graphite #3E4A57, sand #F3F1ED / #E4DFD6, white; Commissioner typeface; squared (0–4px) corners; flat; supplied logo icon and "ΖΙΟΥ" wordmark (Υ drawn as a paint roller) must not be redrawn. Primary button = orange with navy text. Tagline "Χτίζουμε σωστά."
+Since 2026-10-17 the client's own logo is binding: a running stick-figure tradesman in a grey cap holding a paintbrush and a drill, with "ΑΝΑΚΑΙΝΙΣΕΙΣ ΖΙΟΥ / est 2025". It was redrawn as vector (src/assets/brand/logo-runner.svg, logo-full.svg) from the client's JPG (src/assets/brand/source/). The client wants black, white and grey only — no orange or other colour: charcoal #1C1C1C, graphite #3A3A3A, logo grey #8D8D8D (accent, buttons with charcoal text), light grey #E4E4E4, off-white #F3F3F3, white. Commissioner typeface; squared (0–4px) corners; flat. Tagline "Χτίζουμε σωστά." The earlier navy/orange brand board (house-roof icon, paint-roller wordmark) is retired.
 
 ## Evidence on Hand
 
