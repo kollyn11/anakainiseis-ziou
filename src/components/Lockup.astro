@@ -1,0 +1,70 @@
+---
+/**
+ * Brand lockup: icon + (wordmark stacked over the "ΑΝΑΚΑΙΝΙΣΕΙΣ" tagline).
+ * `dark` switches to the inverse icon and white letters for navy backgrounds.
+ */
+import LogoIcon from './LogoIcon.astro';
+import Wordmark from './Wordmark.astro';
+import { site } from '../config/site';
+import { tagline } from '../assets/brand/tagline';
+
+interface Props {
+  dark?: boolean;
+  href?: string;
+  size?: 'md' | 'lg';
+}
+const { dark = false, href = '/', size = 'md' } = Astro.props;
+const iconSize = size === 'lg' ? 64 : 46;
+const wordHeight = size === 'lg' ? 52 : 38;
+// Tagline outline is drawn at 100px font size; scale to ~10px (md) or ~13px (lg).
+const tagScale = size === 'lg' ? 0.13 : 0.1;
+---
+
+<a href={href} class:list={['lockup', `lockup--${size}`, { 'lockup--dark': dark }]} aria-label={`${site.name} — αρχική σελίδα`}>
+  <LogoIcon inverse={dark} size={iconSize} class="lockup__icon" />
+  <span class="lockup__text">
+    <Wordmark height={wordHeight} class="lockup__word" />
+    <svg
+      class="lockup__tag"
+      viewBox={`0 0 ${tagline.width} ${tagline.height}`}
+      width={Math.round(tagline.width * tagScale)}
+      height={Math.round(tagline.height * tagScale)}
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d={tagline.d} fill="#E8662B"></path>
+    </svg>
+  </span>
+</a>
+
+<style>
+  .lockup {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--navy);
+    text-decoration: none;
+    flex: none;
+  }
+
+  .lockup--dark {
+    color: var(--white);
+  }
+
+  :global(.lockup__icon) {
+    flex: none;
+  }
+
+  .lockup__text {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  :global(.lockup__word) {
+    height: auto;
+  }
+
+  .lockup__tag {
+    margin-top: 0.15rem;
+  }
+</style>
