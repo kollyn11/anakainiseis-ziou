@@ -9,7 +9,7 @@ export const site = {
   url: 'https://anakainiseis-ziou.netlify.app',
 
   /** GitHub repository (owner/name) the CMS at /admin saves projects to. */
-  repo: 'GITHUB_OWNER/anakainiseis-ziou',
+  repo: 'kollyn11/anakainiseis-ziou',
 
   name: 'ΖΙΟΥ Ανακαινίσεις',
   nameLatin: 'Ziou Renovations',
