@@ -1,0 +1,118 @@
+---
+const steps = [
+  {
+    title: 'Επικοινωνία',
+    text: 'Μας καλείτε ή συμπληρώνετε τη φόρμα. Μας λέτε τι χρειάζεστε και κλείνουμε ραντεβού στον χώρο σας.',
+  },
+  {
+    title: 'Αυτοψία & προσφορά',
+    text: 'Βλέπουμε τον χώρο, παίρνουμε μετρήσεις και σας δίνουμε γραπτή προσφορά με χρονοδιάγραμμα.',
+  },
+  {
+    title: 'Εκτέλεση εργασιών',
+    text: 'Ξεκινάμε όπως συμφωνήσαμε, προστατεύουμε τον χώρο σας και σας ενημερώνουμε σε κάθε φάση.',
+  },
+  {
+    title: 'Παράδοση',
+    text: 'Περνάμε μαζί από κάθε σημείο, καθαρίζουμε και παραδίδουμε. Τελειώσαμε όταν είστε κι εσείς ικανοποιημένοι.',
+  },
+];
+---
+
+<section id="process" class="section section--navy on-navy" aria-labelledby="process-title">
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <h2 id="process-title">Από το πρώτο τηλέφωνο μέχρι την παράδοση</h2>
+      <span class="rule" aria-hidden="true"></span>
+      <p>Τέσσερα βήματα, χωρίς γραφειοκρατία. Ξέρετε πάντα σε ποιο σημείο βρίσκεται η δουλειά σας.</p>
+    </header>
+
+    <ol role="list" class="steps">
+      {
+        steps.map((step, i) => (
+          <li class="step" data-reveal>
+            <span class="step__num" aria-hidden="true">{i + 1}</span>
+            <h3>
+              <span class="visually-hidden">Βήμα {i + 1}: </span>
+              {step.title}
+            </h3>
+            <p>{step.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .steps {
+    display: grid;
+    gap: var(--s-4);
+    counter-reset: step;
+  }
+
+  @media (min-width: 48rem) {
+    .steps {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--s-5) var(--s-4);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .steps {
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--s-4);
+    }
+  }
+
+  .step {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: var(--s-2);
+  }
+
+  /* Orange line connecting the steps, like a chalk line across the site */
+  .step::before {
+    content: '';
+    position: absolute;
+    top: 1.75rem;
+    left: 4.25rem;
+    right: calc(-1 * var(--s-4) + 0.75rem);
+    height: 2px;
+    background: rgb(232 102 43 / 0.55);
+  }
+
+  .step:last-child::before {
+    display: none;
+  }
+
+  @media (max-width: 63.99rem) {
+    .step::before {
+      display: none;
+    }
+  }
+
+  .step__num {
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border: 2px solid var(--orange);
+    border-radius: var(--radius);
+    color: var(--white);
+    font-size: 1.5rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    margin-bottom: var(--s-1);
+  }
+
+  .step:last-child .step__num {
+    background: var(--orange);
+    color: var(--navy);
+  }
+
+  .step p {
+    max-width: 30rem;
+  }
+</style>

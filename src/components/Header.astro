@@ -1,0 +1,288 @@
+---
+import Lockup from './Lockup.astro';
+import Icon from './Icon.astro';
+import { site, links } from '../config/site';
+
+const nav = [
+  { href: '/#services', label: 'Υπηρεσίες' },
+  { href: '/#projects', label: 'Έργα' },
+  { href: '/#process', label: 'Διαδικασία' },
+  { href: '/#faq', label: 'Ερωτήσεις' },
+  { href: '/#contact', label: 'Επικοινωνία' },
+];
+---
+
+<header class="header" data-header>
+  <div class="header__inner container">
+    <Lockup />
+
+    <nav class="header__nav" id="site-menu" aria-label="Κύρια πλοήγηση" data-menu>
+      <ul role="list" class="header__links">
+        {nav.map((item) => (
+          <li><a href={item.href} data-menu-link>{item.label}</a></li>
+        ))}
+      </ul>
+      <div class="header__menu-actions">
+        <a class="btn btn--secondary" href={links.tel}>
+          <Icon name="phone" />
+          {site.phone.display}
+        </a>
+        <a class="btn btn--primary" href="/#contact" data-menu-link>Ζητήστε προσφορά</a>
+      </div>
+    </nav>
+
+    <div class="header__actions">
+      <a class="header__phone" href={links.tel}>
+        <Icon name="phone" size={20} />
+        <span>{site.phone.display}</span>
+      </a>
+      <a class="btn btn--primary header__cta" href="/#contact">Ζητήστε προσφορά</a>
+      <button
+        class="header__toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="site-menu"
+        data-menu-toggle
+      >
+        <span class="visually-hidden" data-menu-label>Άνοιγμα μενού</span>
+        <Icon name="menu" size={26} class="header__toggle-open" />
+        <Icon name="close" size={26} class="header__toggle-close" />
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--white);
+    border-bottom: 1px solid var(--sand-dark);
+  }
+
+  .header__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    min-height: var(--header-h);
+  }
+
+  .header__nav {
+    margin-left: auto;
+  }
+
+  .header__links {
+    display: flex;
+    gap: clamp(1rem, 2vw, 1.75rem);
+  }
+
+  .header__links a {
+    position: relative;
+    display: inline-block;
+    padding-block: 0.5rem;
+    color: var(--navy);
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .header__links a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.2rem;
+    height: 2px;
+    background: var(--orange);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 220ms var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .header__links a:hover::after {
+      transform: scaleX(1);
+    }
+  }
+
+  .header__menu-actions {
+    display: none;
+  }
+
+  .header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+  }
+
+  .header__phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    text-decoration: none;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .header__phone :global(svg) {
+    color: var(--orange);
+  }
+
+  .header__cta {
+    min-height: 2.875rem;
+    padding-inline: 1.15rem;
+  }
+
+  .header__toggle {
+    display: none;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    margin-right: -0.5rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--navy);
+    cursor: pointer;
+  }
+
+  :global(.header__toggle-close) {
+    display: none;
+  }
+
+  /* Tablet: links move into the menu, phone + CTA stay */
+  @media (max-width: 71.99rem) {
+    .header__inner {
+      flex-wrap: wrap;
+    }
+
+    :global(.js) .header__inner {
+      flex-wrap: nowrap;
+    }
+
+    .header__toggle {
+      display: none;
+    }
+
+    :global(.js) .header__toggle {
+      display: grid;
+    }
+
+    :global(.js) .header__nav {
+      position: absolute;
+      inset: 100% 0 auto 0;
+      display: none;
+      margin: 0;
+      padding: var(--s-3) var(--gutter) var(--s-4);
+      background: var(--white);
+      border-bottom: 4px solid var(--orange);
+      box-shadow: 0 18px 30px -18px rgb(20 50 92 / 0.35);
+      max-height: calc(100dvh - var(--header-h));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+
+    :global(.js) .header[data-open] .header__nav {
+      display: block;
+    }
+
+    .header__nav {
+      order: 3;
+      flex-basis: 100%;
+    }
+
+    .header__links {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .header__links a {
+      display: block;
+      padding-block: 0.85rem;
+      border-bottom: 1px solid var(--sand-dark);
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .header__links a::after {
+      display: none;
+    }
+
+    .header__actions {
+      margin-left: auto;
+    }
+
+    .header[data-open] :global(.header__toggle-open) {
+      display: none;
+    }
+
+    .header[data-open] :global(.header__toggle-close) {
+      display: block;
+    }
+  }
+
+  /* Phone: everything into the menu; the bottom bar carries call + quote */
+  @media (max-width: 47.99rem) {
+    .header__phone,
+    .header__cta {
+      display: none;
+    }
+
+    .header__menu-actions {
+      display: grid;
+      gap: var(--s-2);
+      margin-top: var(--s-3);
+    }
+
+    .header__inner {
+      --header-h: 4rem;
+      min-height: 4rem;
+    }
+  }
+
+  @media (max-width: 22rem) {
+    .header :global(.lockup__icon) {
+      width: 38px;
+      height: 38px;
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const toggle = header?.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const label = header?.querySelector<HTMLElement>('[data-menu-label]');
+
+  if (header && toggle && label) {
+    const setOpen = (open: boolean) => {
+      header.toggleAttribute('data-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      label.textContent = open ? 'Κλείσιμο μενού' : 'Άνοιγμα μενού';
+    };
+
+    toggle.addEventListener('click', () => setOpen(!header.hasAttribute('data-open')));
+
+    header.querySelectorAll('[data-menu-link]').forEach((link) =>
+      link.addEventListener('click', () => setOpen(false)),
+    );
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && header.hasAttribute('data-open')) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (header.hasAttribute('data-open') && !header.contains(e.target as Node)) setOpen(false);
+    });
+
+    matchMedia('(min-width: 72rem)').addEventListener('change', (e) => {
+      if (e.matches) setOpen(false);
+    });
+  }
+</script>

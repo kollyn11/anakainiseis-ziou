@@ -1,0 +1,117 @@
+---
+import Icon from './Icon.astro';
+
+// TODO(owner): Read these four promises and confirm each one describes how you actually work.
+const points = [
+  {
+    icon: 'clock',
+    title: 'Συνέπεια στα χρονοδιαγράμματα',
+    text: 'Σας δίνουμε ημερομηνίες από την αρχή και σας ενημερώνουμε αμέσως αν κάτι αλλάξει. Δεν μαθαίνετε τα νέα τελευταίοι.',
+  },
+  {
+    icon: 'broom',
+    title: 'Καθαρός χώρος εργασίας',
+    text: 'Προστατεύουμε δάπεδα, έπιπλα και κουφώματα, μαζεύουμε τα μπάζα και αφήνουμε τον χώρο τακτοποιημένο όταν φεύγουμε.',
+  },
+  {
+    icon: 'receipt',
+    title: 'Ξεκάθαρη προσφορά',
+    text: 'Γραπτή προσφορά ανά εργασία, χωρίς κρυφές χρεώσεις. Ό,τι δεν γράφει η προσφορά δεν μπαίνει στον λογαριασμό χωρίς να το συζητήσουμε.',
+  },
+  {
+    icon: 'person',
+    title: 'Μιλάτε με τον ίδιο τον τεχνίτη',
+    text: 'Όχι τηλεφωνικό κέντρο, όχι μεσάζοντες. Ο άνθρωπος που σας δίνει την προσφορά είναι αυτός που κάνει τη δουλειά.',
+  },
+] as const;
+---
+
+<section class="section why" aria-labelledby="why-title">
+  <div class="container why__grid">
+    <header class="why__head" data-reveal>
+      <h2 id="why-title">Δουλειά χωρίς εκπλήξεις</h2>
+      <span class="rule" aria-hidden="true"></span>
+      <p>
+        Μια ανακαίνιση είναι μπελάς όταν δεν ξέρετε τι γίνεται. Γι’ αυτό δουλεύουμε με τέσσερις απλούς
+        κανόνες — τους ίδιους σε ένα δωμάτιο και σε ένα ολόκληρο σπίτι.
+      </p>
+    </header>
+
+    <ul role="list" class="why__list">
+      {
+        points.map((p) => (
+          <li class="why__item" data-reveal>
+            <span class="why__icon" aria-hidden="true">
+              <Icon name={p.icon} size={28} />
+            </span>
+            <div>
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .why__grid {
+    display: grid;
+    gap: var(--s-5);
+  }
+
+  @media (min-width: 64rem) {
+    .why__grid {
+      grid-template-columns: 5fr 7fr;
+      gap: var(--s-6);
+      align-items: start;
+    }
+
+    .why__head {
+      position: sticky;
+      top: calc(var(--header-h) + var(--s-4));
+    }
+  }
+
+  .why__head {
+    display: grid;
+    gap: var(--s-2);
+  }
+
+  .why__head p {
+    max-width: 30rem;
+    font-size: 1.1875rem;
+  }
+
+  .why__list {
+    border-top: 2px solid var(--navy);
+  }
+
+  .why__item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--s-3);
+    padding-block: var(--s-4);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .why__item div {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .why__icon {
+    display: grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: var(--radius);
+    background: var(--navy);
+    color: var(--orange);
+  }
+
+  .why__item p {
+    max-width: 36rem;
+  }
+</style>

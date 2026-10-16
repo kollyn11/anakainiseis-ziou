@@ -1,0 +1,69 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { site, links } from '../config/site';
+---
+
+<Base
+  title={`Η σελίδα δεν βρέθηκε | ${site.name}`}
+  description="Η σελίδα που ζητήσατε δεν υπάρχει. Επιστρέψτε στην αρχική σελίδα της ΖΙΟΥ Ανακαινίσεις."
+  path="/404/"
+  noindex
+>
+  <section class="nf on-navy">
+    <svg class="nf__mark" viewBox="0 0 104 104" aria-hidden="true" focusable="false">
+      <path d="M18 58 L52 28 L86 58" stroke="#E8662B" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+      <path d="M32 54 L32 80 L60 80" stroke="rgb(255 255 255 / .18)" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 10"></path>
+    </svg>
+    <div class="container nf__inner">
+      <p class="nf__code" aria-hidden="true">404</p>
+      <h1>Αυτή η σελίδα δεν έχει χτιστεί ακόμα.</h1>
+      <p>Ο σύνδεσμος μπορεί να είναι λάθος ή η σελίδα να έχει μετακινηθεί.</p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="/"><Icon name="arrowLeft" /> Αρχική σελίδα</a>
+        <a class="btn btn--on-navy" href={links.tel}><Icon name="phone" /> {site.phone.display}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    position: relative;
+    overflow: hidden;
+    background: var(--navy);
+    color: var(--navy-ink-soft);
+  }
+
+  .nf__mark {
+    position: absolute;
+    right: -6rem;
+    bottom: -4rem;
+    width: clamp(20rem, 45vw, 40rem);
+    height: auto;
+    opacity: 0.9;
+  }
+
+  .nf__inner {
+    position: relative;
+    display: grid;
+    justify-items: start;
+    gap: var(--s-3);
+    min-height: calc(100dvh - var(--header-h));
+    align-content: center;
+    padding-block: var(--s-6);
+  }
+
+  .nf__code {
+    color: var(--orange);
+    font-size: 1.1875rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+  }
+
+  .nf h1 {
+    max-width: 16ch;
+    color: var(--white);
+    font-size: clamp(2.25rem, 1.6rem + 3vw, 4rem);
+  }
+</style>

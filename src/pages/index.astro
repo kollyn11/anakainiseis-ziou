@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Services from '../components/Services.astro';
+import WhyUs from '../components/WhyUs.astro';
+import Process from '../components/Process.astro';
+import Projects from '../components/Projects.astro';
+import Faq from '../components/Faq.astro';
+import Contact from '../components/Contact.astro';
+import { site } from '../config/site';
+import { businessSchema, websiteSchema, faqSchema, graph } from '../lib/schema';
+
+const title = `${site.name} | Ανακαινίσεις, Χρωματισμοί, Γυψοσανίδες στην Αττική`;
+const description =
+  'Ανακαίνιση σπιτιού και επαγγελματικών χώρων σε Αθήνα, Δυτική Αττική και Ελευσίνα. Χρωματισμοί, γυψοσανίδες & ψευδοροφές, θερμοπροσόψεις, μόνωση ταράτσας. Δωρεάν αυτοψία και προσφορά.';
+---
+
+<Base
+  title={title}
+  description={description}
+  path="/"
+  jsonLd={graph(businessSchema(), websiteSchema(), faqSchema())}
+>
+  <Hero />
+  <Services />
+  <WhyUs />
+  <Process />
+  <Projects />
+  <Faq />
+  <Contact />
+</Base>

@@ -1,0 +1,137 @@
+---
+import Icon from './Icon.astro';
+import { services } from '../data/services';
+---
+
+<section id="services" class="section section--white" aria-labelledby="services-title">
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <h2 id="services-title">Τι αναλαμβάνουμε</h2>
+      <span class="rule" aria-hidden="true"></span>
+      <p>
+        Από την ανακαίνιση σπιτιού μέχρι τη μόνωση ταράτσας — με έναν άνθρωπο να συνεννοείστε από την
+        πρώτη μέτρηση μέχρι την παράδοση.
+      </p>
+    </header>
+
+    <ul role="list" class="services">
+      {
+        services.map((s, i) => (
+          <li class:list={['service', { 'service--lead': i === 0 }]} data-reveal>
+            <span class="service__bar" aria-hidden="true" />
+            <Icon name={s.icon} size={44} class="service__icon" />
+            <h3 class="service__title">
+              {s.name}
+              <span class="service__detail">{s.detail}</span>
+            </h3>
+            <p>{s.description}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .services {
+    display: grid;
+    gap: var(--s-2);
+  }
+
+  @media (min-width: 40rem) {
+    .services {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .service--lead {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .services {
+      grid-template-columns: repeat(6, 1fr);
+    }
+
+    .service {
+      grid-column: span 2;
+    }
+
+    .service--lead,
+    .service:nth-child(2) {
+      grid-column: span 3;
+    }
+  }
+
+  .service {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: var(--s-2);
+    padding: var(--s-4) var(--s-4) var(--s-5);
+    background: var(--sand);
+    border-radius: var(--radius);
+  }
+
+  .service__bar {
+    position: absolute;
+    top: 0;
+    left: var(--s-4);
+    width: 3rem;
+    height: 4px;
+    background: var(--orange);
+    transition: width 320ms var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .service:hover .service__bar {
+      width: 5.5rem;
+    }
+  }
+
+  .service :global(.service__icon) {
+    color: var(--navy);
+    margin-bottom: var(--s-1);
+  }
+
+  .service__title {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .service__detail {
+    color: var(--graphite);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+
+  .service p {
+    max-width: 34rem;
+  }
+
+  /* The lead trade — full renovations — gets the navy treatment */
+  .service--lead {
+    background: var(--navy);
+    color: var(--navy-ink-soft);
+  }
+
+  .service--lead .service__title {
+    color: var(--white);
+    font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  }
+
+  .service--lead .service__detail {
+    color: var(--navy-ink-soft);
+  }
+
+  .service--lead :global(.service__icon) {
+    color: var(--orange);
+  }
+
+  @media (min-width: 64rem) {
+    .service--lead {
+      padding-right: var(--s-6);
+    }
+  }
+</style>

@@ -1,0 +1,89 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { site, links } from '../config/site';
+---
+
+<Base
+  title={`Ευχαριστούμε | ${site.name}`}
+  description="Λάβαμε το αίτημά σας για προσφορά. Θα επικοινωνήσουμε μαζί σας σύντομα."
+  path="/efxaristoume/"
+  noindex
+  hideMobileBar
+>
+  <section class="thanks on-navy">
+    <div class="container thanks__inner">
+      <span class="thanks__check" aria-hidden="true"><Icon name="check" size={40} /></span>
+      <h1>Ευχαριστούμε, λάβαμε το αίτημά σας.</h1>
+      <p class="thanks__lead">Θα επικοινωνήσουμε μαζί σας σύντομα για να κανονίσουμε αυτοψία.</p>
+      <p>Αν θέλετε να μιλήσουμε νωρίτερα, καλέστε μας:</p>
+      <a class="thanks__phone" href={links.tel}>
+        <Icon name="phone" size={28} />
+        {site.phone.display}
+      </a>
+      <div class="btn-row">
+        <a class="btn btn--primary" href={links.tel}><Icon name="phone" /> Κλήση</a>
+        <a class="btn btn--on-navy" href="/"><Icon name="arrowLeft" /> Αρχική σελίδα</a>
+      </div>
+    </div>
+    <div class="thanks__band" aria-hidden="true"></div>
+  </section>
+</Base>
+
+<style>
+  .thanks {
+    background: var(--navy);
+    color: var(--navy-ink-soft);
+  }
+
+  .thanks__inner {
+    display: grid;
+    justify-items: start;
+    gap: var(--s-3);
+    min-height: calc(100dvh - var(--header-h) - 6px);
+    align-content: center;
+    padding-block: var(--s-6);
+  }
+
+  .thanks__check {
+    display: grid;
+    place-items: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: var(--radius);
+    background: var(--orange);
+    color: var(--navy);
+  }
+
+  .thanks h1 {
+    max-width: 18ch;
+    color: var(--white);
+    font-size: clamp(2.25rem, 1.6rem + 3vw, 4rem);
+  }
+
+  .thanks__lead {
+    color: var(--white);
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+    font-weight: 500;
+  }
+
+  .thanks__phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--white);
+    font-size: clamp(2rem, 1.6rem + 2vw, 3rem);
+    font-weight: 800;
+    text-decoration: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .thanks__phone :global(svg) {
+    color: var(--orange);
+  }
+
+  .thanks__band {
+    height: 6px;
+    background: var(--orange);
+  }
+</style>

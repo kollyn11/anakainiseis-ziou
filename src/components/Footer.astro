@@ -1,0 +1,158 @@
+---
+import Lockup from './Lockup.astro';
+import Icon from './Icon.astro';
+import { site, links } from '../config/site';
+import { services } from '../data/services';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer on-navy">
+  <div class="footer__band" aria-hidden="true"></div>
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <Lockup dark />
+      <p>
+        Ανακαινίσεις, χρωματισμοί, γυψοσανίδες, θερμοπροσόψεις και μονώσεις σε {site.areas.join(', ')} και σε όλη την {site.region}.
+      </p>
+      <a class="footer__ig" href={site.instagram.url} rel="noopener" target="_blank">
+        <Icon name="instagram" size={22} />
+        <span>@{site.instagram.handle}</span>
+        <span class="visually-hidden">(ανοίγει σε νέα καρτέλα)</span>
+      </a>
+    </div>
+
+    <nav class="footer__col" aria-label="Υπηρεσίες">
+      <h2 class="footer__title">Υπηρεσίες</h2>
+      <ul role="list">
+        {services.map((s) => <li><a href="/#services">{s.name}</a></li>)}
+      </ul>
+    </nav>
+
+    <nav class="footer__col" aria-label="Σύνδεσμοι">
+      <h2 class="footer__title">Σελίδες</h2>
+      <ul role="list">
+        <li><a href="/#process">Πώς δουλεύουμε</a></li>
+        <li><a href="/erga/">Έργα</a></li>
+        <li><a href="/#faq">Συχνές ερωτήσεις</a></li>
+        <li><a href="/#contact">Ζητήστε προσφορά</a></li>
+        <li><a href="/politiki-aporritou/">Πολιτική απορρήτου</a></li>
+      </ul>
+    </nav>
+
+    <div class="footer__col">
+      <h2 class="footer__title">Επικοινωνία</h2>
+      <ul role="list" class="footer__contact">
+        <li>
+          <a href={links.tel}><Icon name="phone" size={20} /><span>{site.phone.display}</span></a>
+        </li>
+        <li>
+          <a href={links.mailto}><Icon name="mail" size={20} /><span>{site.email}</span></a>
+        </li>
+        <li>
+          <span class="footer__area"><Icon name="pin" size={20} /><span>{site.region} · {site.areas.join(' · ')}</span></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container footer__bottom">
+    <p>© {year} {site.name}{site.vatId && <> · ΑΦΜ {site.vatId}</>}</p>
+    <p>{site.tagline}</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--navy);
+    color: var(--navy-ink-soft);
+    font-size: 1rem;
+  }
+
+  .footer__band {
+    height: 6px;
+    background: var(--orange);
+  }
+
+  .footer__grid {
+    display: grid;
+    gap: var(--s-5) var(--s-4);
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    padding-block: var(--s-6) var(--s-5);
+  }
+
+  .footer__brand {
+    display: grid;
+    align-content: start;
+    gap: var(--s-3);
+    grid-column: span 1;
+    max-width: 22rem;
+  }
+
+  @media (min-width: 64rem) {
+    .footer__grid {
+      grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+    }
+  }
+
+  .footer a {
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  @media (hover: hover) {
+    .footer a:hover {
+      text-decoration: underline;
+      text-decoration-color: var(--orange);
+    }
+  }
+
+  .footer__title {
+    margin-bottom: var(--s-2);
+    color: var(--white);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .footer__col ul {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .footer__col li a {
+    display: inline-block;
+    padding-block: 0.4rem;
+  }
+
+  .footer__contact a,
+  .footer__area,
+  .footer__ig {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 0.6rem;
+    overflow-wrap: anywhere;
+  }
+
+  .footer__contact :global(svg),
+  .footer__area :global(svg),
+  .footer__ig :global(svg) {
+    flex: none;
+    color: var(--orange);
+  }
+
+  .footer__ig {
+    font-weight: 700;
+  }
+
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--s-1) var(--s-3);
+    padding-block: var(--s-3);
+    border-top: 1px solid var(--line-navy);
+    font-size: 0.9375rem;
+  }
+</style>

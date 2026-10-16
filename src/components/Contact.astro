@@ -1,0 +1,517 @@
+---
+import Icon from './Icon.astro';
+import { site, links } from '../config/site';
+import { services } from '../data/services';
+---
+
+<section id="contact" class="section contact" aria-labelledby="contact-title">
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <h2 id="contact-title">Ζητήστε δωρεάν προσφορά</h2>
+      <span class="rule" aria-hidden="true"></span>
+      <p>
+        Πείτε μας τι θέλετε να γίνει και θα σας καλέσουμε για να κανονίσουμε αυτοψία. Αν βιάζεστε, πάρτε μας
+        τηλέφωνο.
+      </p>
+    </header>
+
+    <div class="contact__grid">
+      <form
+        class="form"
+        name="prosfora"
+        method="POST"
+        action="/efxaristoume/"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        data-quote-form
+      >
+        <input type="hidden" name="form-name" value="prosfora" />
+        <input type="hidden" name="subject" value="Νέο αίτημα προσφοράς – anakainiseis-ziou" data-subject />
+        <p class="visually-hidden" aria-hidden="true">
+          <label>Μην συμπληρώσετε αυτό το πεδίο: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+        </p>
+
+        <div class="form__summary" role="alert" tabindex="-1" hidden data-error-summary>
+          Ελέγξτε τα πεδία που σημειώνονται παρακάτω.
+        </div>
+
+        <div class="form__row">
+          <div class="field">
+            <label for="f-name">Ονοματεπώνυμο <span class="req" aria-hidden="true">*</span></label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required minlength="3"
+              aria-describedby="f-name-err" data-msg-missing="Γράψτε το ονοματεπώνυμό σας."
+              data-msg-short="Το ονοματεπώνυμο φαίνεται πολύ σύντομο." />
+            <p class="field__error" id="f-name-err" data-error></p>
+          </div>
+
+          <div class="field">
+            <label for="f-phone">Τηλέφωνο <span class="req" aria-hidden="true">*</span></label>
+            <input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required
+              pattern="[+0-9 ().\-]{10,20}" aria-describedby="f-phone-err"
+              data-msg-missing="Γράψτε ένα τηλέφωνο για να σας καλέσουμε."
+              data-msg-pattern="Γράψτε έναν έγκυρο αριθμό, π.χ. 69XXXXXXXX." />
+            <p class="field__error" id="f-phone-err" data-error></p>
+          </div>
+        </div>
+
+        <div class="form__row">
+          <div class="field">
+            <label for="f-email">Email <span class="opt">(προαιρετικό)</span></label>
+            <input id="f-email" name="email" type="email" autocomplete="email" aria-describedby="f-email-err"
+              data-msg-type="Το email δεν φαίνεται σωστό. Ελέγξτε το ή αφήστε το κενό." />
+            <p class="field__error" id="f-email-err" data-error></p>
+          </div>
+
+          <div class="field">
+            <label for="f-area">Περιοχή <span class="opt">(προαιρετικό)</span></label>
+            <input id="f-area" name="area" type="text" autocomplete="address-level2" placeholder="π.χ. Ελευσίνα" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="f-service">Τύπος εργασίας <span class="req" aria-hidden="true">*</span></label>
+          <div class="select">
+            <select id="f-service" name="service" required aria-describedby="f-service-err"
+              data-msg-missing="Διαλέξτε τι είδους εργασία χρειάζεστε.">
+              <option value="" selected disabled>Επιλέξτε εργασία</option>
+              {services.map((s) => <option value={s.name}>{s.name}</option>)}
+              <option value="Άλλο">Άλλο</option>
+            </select>
+          </div>
+          <p class="field__error" id="f-service-err" data-error></p>
+        </div>
+
+        <div class="field">
+          <label for="f-message">Μήνυμα <span class="req" aria-hidden="true">*</span></label>
+          <textarea id="f-message" name="message" rows="5" required minlength="10"
+            aria-describedby="f-message-hint f-message-err"
+            data-msg-missing="Περιγράψτε σύντομα τι θέλετε να γίνει."
+            data-msg-short="Γράψτε λίγα παραπάνω λόγια, ώστε να καταλάβουμε τη δουλειά."></textarea>
+          <p class="field__hint" id="f-message-hint">Π.χ. τι χώρος είναι, περίπου πόσα τετραγωνικά, πότε θέλετε να ξεκινήσει.</p>
+          <p class="field__error" id="f-message-err" data-error></p>
+        </div>
+
+        <div class="field field--check">
+          <input id="f-consent" name="consent" type="checkbox" value="Ναι" required aria-describedby="f-consent-err"
+            data-msg-missing="Χρειαζόμαστε τη συγκατάθεσή σας για να απαντήσουμε στο αίτημα." />
+          <label for="f-consent">
+            Συμφωνώ να χρησιμοποιηθούν τα στοιχεία μου μόνο για να απαντήσετε στο αίτημά μου, σύμφωνα με την{" "}
+            <a href="/politiki-aporritou/">Πολιτική Απορρήτου</a>. <span class="req" aria-hidden="true">*</span>
+          </label>
+          <p class="field__error" id="f-consent-err" data-error></p>
+        </div>
+
+        <div class="form__submit">
+          <button class="btn btn--primary" type="submit" data-submit>
+            Αποστολή αιτήματος
+            <Icon name="arrow" />
+          </button>
+          <p class="form__note"><span class="req" aria-hidden="true">*</span> Υποχρεωτικά πεδία</p>
+        </div>
+      </form>
+
+      <aside class="info on-navy" aria-label="Στοιχεία επικοινωνίας">
+        <p class="info__title">Προτιμάτε να μιλήσουμε;</p>
+        <a class="info__phone" href={links.tel}>
+          <Icon name="phone" size={26} />
+          {site.phone.display}
+        </a>
+
+        <div class="info__quick">
+          <a class="quick" href={links.tel}>
+            <Icon name="phone" size={22} />
+            Κλήση
+          </a>
+          <a class="quick" href={links.viber}>
+            <Icon name="viber" size={22} />
+            Viber
+          </a>
+          <a class="quick" href={links.whatsapp} rel="noopener" target="_blank">
+            <Icon name="whatsapp" size={22} />
+            WhatsApp
+          </a>
+        </div>
+        <p class="info__tip">Στείλτε μας φωτογραφίες του χώρου σε Viber ή WhatsApp για μια πρώτη εκτίμηση.</p>
+
+        <dl class="info__list">
+          <div>
+            <dt><Icon name="mail" size={20} /> Email</dt>
+            <dd><a href={links.mailto}>{site.email}</a></dd>
+          </div>
+          <div>
+            <dt><Icon name="instagram" size={20} /> Instagram</dt>
+            <dd><a href={site.instagram.url} rel="noopener" target="_blank">@{site.instagram.handle}<span class="visually-hidden"> (ανοίγει σε νέα καρτέλα)</span></a></dd>
+          </div>
+          <div>
+            <dt><Icon name="pin" size={20} /> Περιοχές</dt>
+            <dd>{site.areas.join(', ')} και όλη η {site.region}</dd>
+          </div>
+        </dl>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    background: var(--sand);
+  }
+
+  .contact__grid {
+    display: grid;
+    gap: var(--s-3);
+    align-items: start;
+  }
+
+  @media (min-width: 64rem) {
+    .contact__grid {
+      grid-template-columns: 7fr 4fr;
+    }
+
+    .info {
+      position: sticky;
+      top: calc(var(--header-h) + var(--s-3));
+    }
+  }
+
+  /* ---------- Form ---------- */
+  .form {
+    display: grid;
+    gap: var(--s-3);
+    padding: clamp(1.25rem, 0.5rem + 3vw, 2.5rem);
+    background: var(--white);
+    border-radius: 0 0 var(--radius) var(--radius);
+    border-top: 6px solid var(--navy);
+  }
+
+  .form__row {
+    display: grid;
+    gap: var(--s-3);
+  }
+
+  @media (min-width: 40rem) {
+    .form__row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .form__summary {
+    padding: 0.85rem 1rem;
+    background: #fbeceb;
+    border-left: 1px solid var(--error);
+    color: var(--error);
+    font-weight: 700;
+  }
+
+  .field {
+    display: grid;
+    gap: 0.4rem;
+    align-content: start;
+  }
+
+  .field label {
+    color: var(--navy);
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .req {
+    color: var(--error);
+  }
+
+  .opt {
+    color: var(--graphite);
+    font-weight: 400;
+  }
+
+  .field input:not([type='checkbox']),
+  .field select,
+  .field textarea {
+    width: 100%;
+    min-height: 3.25rem;
+    padding: 0.75rem 0.9rem;
+    border: 2px solid #b9b2a6;
+    border-radius: var(--radius);
+    background: var(--white);
+    color: var(--graphite);
+    font-size: 1.0625rem; /* ≥16px keeps iOS from zooming on focus */
+    line-height: 1.4;
+    transition: border-color 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+  }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 8rem;
+  }
+
+  .field ::placeholder {
+    color: #6b7480;
+  }
+
+  .field input:focus-visible,
+  .field select:focus-visible,
+  .field textarea:focus-visible {
+    outline: none;
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgb(232 102 43 / 0.55);
+  }
+
+  .field [aria-invalid='true'] {
+    border-color: var(--error) !important;
+  }
+
+  .select {
+    position: relative;
+  }
+
+  .select::after {
+    content: '';
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-right: 2px solid var(--navy);
+    border-bottom: 2px solid var(--navy);
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+  }
+
+  .select select {
+    appearance: none;
+    padding-right: 2.5rem;
+    cursor: pointer;
+  }
+
+  .field__hint {
+    font-size: 0.9375rem;
+  }
+
+  .field__error {
+    color: var(--error);
+    font-size: 0.9375rem;
+    font-weight: 700;
+  }
+
+  .field__error:empty {
+    display: none;
+  }
+
+  .field--check {
+    grid-template-columns: auto 1fr;
+    column-gap: 0.75rem;
+    align-items: start;
+  }
+
+  .field--check input {
+    width: 1.375rem;
+    height: 1.375rem;
+    margin: 0.2rem 0 0;
+    cursor: pointer;
+  }
+
+  .field--check label {
+    font-weight: 400;
+    color: var(--graphite);
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .field--check .field__error {
+    grid-column: 2;
+  }
+
+  .form__submit {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-2) var(--s-3);
+    margin-top: var(--s-1);
+  }
+
+  .form__submit .btn[aria-busy='true'] {
+    opacity: 0.75;
+    cursor: progress;
+  }
+
+  .form__note {
+    font-size: 0.9375rem;
+  }
+
+  @media (max-width: 39.99rem) {
+    .form__submit .btn {
+      width: 100%;
+    }
+  }
+
+  /* ---------- Contact info ---------- */
+  .info {
+    display: grid;
+    gap: var(--s-3);
+    padding: clamp(1.25rem, 0.5rem + 3vw, 2.5rem);
+    background: var(--navy);
+    border-radius: var(--radius);
+    color: var(--navy-ink-soft);
+  }
+
+  .info__title {
+    color: var(--white);
+    font-size: 1.375rem;
+    font-weight: 700;
+  }
+
+  .info__phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--white);
+    font-size: clamp(1.625rem, 1.3rem + 1vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .info__phone :global(svg) {
+    color: var(--orange);
+  }
+
+  .info__quick {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+
+  .quick {
+    display: grid;
+    justify-items: center;
+    gap: 0.3rem;
+    padding: 0.8rem 0.4rem;
+    border: 2px solid rgb(255 255 255 / 0.28);
+    border-radius: var(--radius);
+    color: var(--white);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: border-color 160ms var(--ease-out), background-color 160ms var(--ease-out);
+  }
+
+  .quick :global(svg) {
+    color: var(--orange);
+  }
+
+  @media (hover: hover) {
+    .quick:hover {
+      border-color: var(--orange);
+      background: var(--navy-deep);
+    }
+  }
+
+  .info__tip {
+    font-size: 0.9375rem;
+  }
+
+  .info__list {
+    display: grid;
+    gap: var(--s-2);
+    margin: 0;
+    padding-top: var(--s-3);
+    border-top: 1px solid var(--line-navy);
+  }
+
+  .info__list dt {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .info__list dt :global(svg) {
+    color: var(--orange);
+  }
+
+  .info__list dd {
+    margin: 0.2rem 0 0;
+    color: var(--white);
+    overflow-wrap: anywhere;
+  }
+
+  .info__list a {
+    color: var(--white);
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-quote-form]');
+
+  if (form) {
+    form.noValidate = true; // we show our own Greek messages; native validation stays as the no-JS fallback
+    const summary = form.querySelector<HTMLElement>('[data-error-summary]')!;
+    const subject = form.querySelector<HTMLInputElement>('[data-subject]')!;
+    const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+    type Field = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+    const fields = Array.from(form.querySelectorAll<Field>('input[aria-describedby], select, textarea'));
+
+    const errorEl = (field: Field) =>
+      document.getElementById(field.id + '-err') as HTMLElement | null;
+
+    const messageFor = (field: Field): string => {
+      const v = field.validity;
+      const d = field.dataset;
+      if (field.name === 'phone' && field.value.trim() && field.value.replace(/\D/g, '').length < 10) {
+        return d.msgPattern ?? '';
+      }
+      if (v.valueMissing) return d.msgMissing ?? 'Συμπληρώστε αυτό το πεδίο.';
+      if (v.typeMismatch) return d.msgType ?? 'Η τιμή δεν είναι σωστή.';
+      if (v.patternMismatch) return d.msgPattern ?? 'Η τιμή δεν είναι σωστή.';
+      if (v.tooShort) return d.msgShort ?? 'Γράψτε λίγα παραπάνω.';
+      return '';
+    };
+
+    const check = (field: Field) => {
+      if (field.name === 'name' || field.name === 'message') field.value = field.value.trimStart();
+      const msg = messageFor(field);
+      const err = errorEl(field);
+      if (err) err.textContent = msg;
+      field.setAttribute('aria-invalid', msg ? 'true' : 'false');
+      return !msg;
+    };
+
+    fields.forEach((field) => {
+      field.addEventListener('blur', () => {
+        if (field.getAttribute('aria-invalid') === 'true' || field.value) check(field);
+      });
+      field.addEventListener(field.type === 'checkbox' || field.tagName === 'SELECT' ? 'change' : 'input', () => {
+        if (field.getAttribute('aria-invalid') === 'true') check(field);
+      });
+    });
+
+    form.addEventListener('submit', (event) => {
+      const invalid = fields.filter((f) => !check(f));
+      if (invalid.length) {
+        event.preventDefault();
+        summary.hidden = false;
+        invalid[0].focus();
+        return;
+      }
+      summary.hidden = true;
+
+      const data = new FormData(form);
+      const name = String(data.get('name') ?? '').trim();
+      const service = String(data.get('service') ?? '').trim();
+      subject.value = `Νέο αίτημα προσφοράς – ${name} – ${service}`;
+
+      submit.setAttribute('aria-busy', 'true');
+      submit.disabled = true;
+      // Let the native POST go to Netlify, which redirects to /efxaristoume/.
+      // Re-enable if the user navigates back (bfcache).
+      addEventListener('pageshow', () => {
+        submit.removeAttribute('aria-busy');
+        submit.disabled = false;
+      }, { once: true });
+    });
+  }
+</script>

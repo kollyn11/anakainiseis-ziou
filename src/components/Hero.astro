@@ -1,0 +1,245 @@
+---
+import Icon from './Icon.astro';
+import { site, links } from '../config/site';
+import { services } from '../data/services';
+---
+
+<section class="hero on-navy" aria-labelledby="hero-title">
+  <div class="hero__grid" aria-hidden="true"></div>
+
+  <!-- The logo's roofline + walls, at building scale. Drawn on once at load. -->
+  <svg class="hero__mark" viewBox="0 0 104 104" aria-hidden="true" focusable="false">
+    <path class="hero__walls" d="M32 54 L32 80 L72 80 L72 54" pathLength="1"></path>
+    <path class="hero__roof" d="M18 58 L52 28 L86 58" pathLength="1"></path>
+  </svg>
+
+  <div class="container hero__inner">
+    <h1 id="hero-title" class="hero__title">
+      <span class="hero__claim">Χτίζουμε <span class="hero__underline">σωστά.</span></span>
+      <span class="hero__sub">Ανακαινίσεις κατοικιών και επαγγελματικών χώρων στην {site.region}</span>
+    </h1>
+
+    <p class="hero__lead">
+      Από ένα φρεσκάρισμα με χρώμα μέχρι ολική ανακαίνιση σπιτιού. Ερχόμαστε στον χώρο σας, σας δίνουμε
+      γραπτή προσφορά χωρίς εκπλήξεις και κάνουμε τη δουλειά όπως συμφωνήθηκε.
+    </p>
+
+    <div class="btn-row hero__ctas">
+      <a class="btn btn--primary" href="#contact">
+        Ζητήστε δωρεάν προσφορά
+        <Icon name="arrow" />
+      </a>
+      <a class="btn btn--on-navy" href={links.tel}>
+        <Icon name="phone" />
+        Καλέστε μας
+      </a>
+    </div>
+
+    <p class="hero__meta">
+      <Icon name="pin" size={20} />
+      <span>{site.areas.join(' · ')}</span>
+      <span class="hero__meta-sep" aria-hidden="true"></span>
+      <a href={links.tel} class="hero__phone">{site.phone.display}</a>
+    </p>
+  </div>
+
+  <div class="hero__band">
+    <ul role="list" class="container hero__services" aria-label="Υπηρεσίες">
+      {services.map((s) => <li>{s.name}</li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--navy);
+    color: var(--navy-ink-soft);
+  }
+
+  /* Faint construction grid on the right half — a drawing board, not decoration noise */
+  .hero__grid {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.055) 1px, transparent 1px);
+    background-size: 48px 48px;
+    background-position: right -1px top -1px;
+    mask-image: linear-gradient(to right, transparent 25%, #000 75%);
+    -webkit-mask-image: linear-gradient(to right, transparent 25%, #000 75%);
+  }
+
+  .hero__mark {
+    position: absolute;
+    z-index: -1;
+    right: max(-8rem, calc((100vw - var(--max)) / 2 - 10rem));
+    bottom: -3.5rem;
+    width: clamp(26rem, 52vw, 50rem);
+    height: auto;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    overflow: visible;
+  }
+
+  .hero__roof {
+    stroke: var(--orange);
+    stroke-width: 10;
+  }
+
+  .hero__walls {
+    stroke: rgb(255 255 255 / 0.16);
+    stroke-width: 8;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__roof,
+    .hero__walls {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: draw 1400ms var(--ease-out) forwards;
+    }
+
+    .hero__roof {
+      animation-delay: 150ms;
+    }
+
+    .hero__walls {
+      animation-delay: 650ms;
+    }
+  }
+
+  @keyframes draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .hero__inner {
+    display: grid;
+    gap: var(--s-4);
+    padding-block: clamp(4rem, 2rem + 8vw, 8.5rem) clamp(3.5rem, 2rem + 6vw, 7rem);
+  }
+
+  .hero__title {
+    display: grid;
+    gap: var(--s-3);
+    color: var(--white);
+  }
+
+  .hero__claim {
+    font-size: var(--fs-h1);
+    line-height: 0.98;
+  }
+
+  .hero__underline {
+    position: relative;
+    white-space: nowrap;
+  }
+
+  .hero__underline::after {
+    content: '';
+    position: absolute;
+    left: 0.04em;
+    right: 0.3em;
+    bottom: -0.06em;
+    height: 0.1em;
+    background: var(--orange);
+  }
+
+  .hero__sub {
+    max-width: 32ch;
+    color: var(--white);
+    font-size: clamp(1.375rem, 1.1rem + 1.1vw, 1.875rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+
+  .hero__lead {
+    max-width: 36rem;
+    font-size: 1.1875rem;
+  }
+
+  .hero__ctas {
+    margin-top: var(--s-1);
+  }
+
+  .hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .hero__meta :global(svg) {
+    color: var(--orange);
+  }
+
+  .hero__meta-sep {
+    width: 1px;
+    height: 1.1em;
+    background: rgb(255 255 255 / 0.25);
+  }
+
+  .hero__phone {
+    color: var(--white);
+    font-weight: 700;
+    text-decoration: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Orange band: the five trades, stated plainly */
+  .hero__band {
+    background: var(--orange);
+    color: var(--navy);
+  }
+
+  .hero__services {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0;
+    padding-block: 1rem;
+    margin: 0 auto;
+    list-style: none;
+    font-size: var(--fs-cta);
+    font-weight: 700;
+  }
+
+  .hero__services li {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .hero__services li:not(:last-child)::after {
+    content: '';
+    width: 0.4rem;
+    height: 0.4rem;
+    margin-inline: 0.9rem;
+    background: var(--navy);
+  }
+
+  @media (max-width: 47.99rem) {
+    .hero__mark {
+      right: -7rem;
+      bottom: -2.5rem;
+      width: 19rem;
+      opacity: 0.3;
+    }
+
+    .hero__meta-sep,
+    .hero__phone {
+      display: none;
+    }
+
+    .hero .btn-row .btn {
+      flex: 1 1 100%;
+    }
+  }
+</style>
