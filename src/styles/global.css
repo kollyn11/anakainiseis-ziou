@@ -3,19 +3,19 @@
    ============================================================ */
 
 :root {
-  /* Brand palette: black / white / grey. Variable names kept from v1 (navy = primary dark, orange = accent). */
-  --navy: #1c1c1c;
-  --orange: #8d8d8d;
-  --graphite: #3a3a3a;
-  --sand: #f3f3f3;
-  --sand-dark: #e4e4e4;
+  /* Brand palette (from the brand board) */
+  --navy: #14325c;
+  --orange: #e8662b;
+  --graphite: #3e4a57;
+  --sand: #f3f1ed;
+  --sand-dark: #e4dfd6;
   --white: #ffffff;
 
   /* Derived tones */
-  --navy-deep: #111111;          /* hover on navy surfaces */
-  --navy-ink-soft: #c8c8c8;      /* secondary text on charcoal — 10.6:1 */
-  --orange-hover: #a3a3a3;
-  --line: #d4d4d4;               /* hairlines on sand */
+  --navy-deep: #0e2546;          /* hover on navy surfaces */
+  --navy-ink-soft: #c9d3e1;      /* secondary text on navy — 9.9:1 */
+  --orange-hover: #f07a43;
+  --line: #d6cfc3;               /* hairlines on sand */
   --line-navy: rgb(255 255 255 / 0.14);
   --error: #a3261b;              /* 6.6:1 on white */
 

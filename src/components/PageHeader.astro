@@ -1,6 +1,4 @@
 ---
-import Logo from './Logo.astro';
-
 interface Props {
   title: string;
   lead?: string;
@@ -10,7 +8,6 @@ const { title, lead, crumbs = [] } = Astro.props;
 ---
 
 <section class="ph on-navy">
-  <Logo height={320} class="ph__mark" />
   <div class="container ph__inner">
     {
       crumbs.length > 0 && (
@@ -38,16 +35,17 @@ const { title, lead, crumbs = [] } = Astro.props;
     color: var(--navy-ink-soft);
   }
 
-  .ph :global(.ph__mark) {
+  .ph::before {
+    content: '';
     position: absolute;
-    right: max(-2rem, calc((100vw - var(--max)) / 2));
-    bottom: -3rem;
-    width: auto;
-    max-width: none;
-    height: 20rem;
-    color: var(--white);
-    opacity: 0.12;
-    pointer-events: none;
+    right: -4rem;
+    bottom: -6rem;
+    width: 22rem;
+    height: 22rem;
+    border-top: 10px solid rgb(232 102 43 / 0.9);
+    border-left: 10px solid rgb(232 102 43 / 0.9);
+    transform: rotate(45deg);
+    opacity: 0.85;
   }
 
   .ph__inner {
@@ -91,11 +89,12 @@ const { title, lead, crumbs = [] } = Astro.props;
   }
 
   @media (max-width: 47.99rem) {
-    .ph :global(.ph__mark) {
-      height: 13rem;
+    .ph::before {
+      width: 12rem;
+      height: 12rem;
       right: -3rem;
-      bottom: -2rem;
-      opacity: 0.1;
+      bottom: -4rem;
+      opacity: 0.5;
     }
   }
 </style>

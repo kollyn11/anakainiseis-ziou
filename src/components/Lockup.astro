@@ -1,9 +1,12 @@
 ---
 /**
- * Brand lockup: runner + "ΖΙΟΥ" stacked over "ΑΝΑΚΑΙΝΙΣΕΙΣ".
- * `dark` = for dark backgrounds (white runner and name).
+ * Brand lockup: icon + (wordmark stacked over the "ΑΝΑΚΑΙΝΙΣΕΙΣ" tagline).
+ * `dark` switches to the inverse icon and white letters for navy backgrounds.
  */
-import Logo from './Logo.astro';
+import LogoIcon from './LogoIcon.astro';
+import Wordmark from './Wordmark.astro';
+import { site } from '../config/site';
+import { tagline } from '../assets/brand/tagline';
 
 interface Props {
   dark?: boolean;
@@ -11,15 +14,26 @@ interface Props {
   size?: 'md' | 'lg';
 }
 const { dark = false, href = '/', size = 'md' } = Astro.props;
-const h = size === 'lg' ? 64 : 50;
+const iconSize = size === 'lg' ? 64 : 46;
+const wordHeight = size === 'lg' ? 52 : 38;
+// Tagline outline is drawn at 100px font size; scale to ~10px (md) or ~13px (lg).
+const tagScale = size === 'lg' ? 0.13 : 0.1;
 ---
 
-<a href={href} class:list={['lockup', `lockup--${size}`, { 'lockup--dark': dark }]}>
-  <Logo height={h} class="lockup__figure" />
+<a href={href} class:list={['lockup', `lockup--${size}`, { 'lockup--dark': dark }]} aria-label={`${site.name} — αρχική σελίδα`}>
+  <LogoIcon inverse={dark} size={iconSize} class="lockup__icon" />
   <span class="lockup__text">
-    <span class="lockup__name">ΖΙΟΥ</span>
-    <span class="lockup__tag">Ανακαινίσεις</span>
-    <span class="visually-hidden"> — αρχική σελίδα</span>
+    <Wordmark height={wordHeight} class="lockup__word" />
+    <svg
+      class="lockup__tag"
+      viewBox={`0 0 ${tagline.width} ${tagline.height}`}
+      width={Math.round(tagline.width * tagScale)}
+      height={Math.round(tagline.height * tagScale)}
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d={tagline.d} fill="#E8662B"></path>
+    </svg>
   </span>
 </a>
 
@@ -27,7 +41,7 @@ const h = size === 'lg' ? 64 : 50;
   .lockup {
     display: inline-flex;
     align-items: center;
-    gap: 0.55rem;
+    gap: 0.7rem;
     color: var(--navy);
     text-decoration: none;
     flex: none;
@@ -37,37 +51,20 @@ const h = size === 'lg' ? 64 : 50;
     color: var(--white);
   }
 
-  .lockup :global(.lockup__figure) {
+  :global(.lockup__icon) {
     flex: none;
   }
 
   .lockup__text {
     display: grid;
-    gap: 0.2rem;
+    gap: 0.15rem;
   }
 
-  .lockup__name {
-    font-size: 1.75rem;
-    font-weight: 800;
-    font-style: italic;
-    letter-spacing: 0.04em;
-    line-height: 0.9;
+  :global(.lockup__word) {
+    height: auto;
   }
 
   .lockup__tag {
-    color: #666666; /* 5.7:1 on white */
-    font-size: 0.6875rem;
-    font-weight: 700;
-    letter-spacing: 0.3em;
-    line-height: 1;
-    text-transform: uppercase;
-  }
-
-  .lockup--dark .lockup__tag {
-    color: #a8a8a8; /* 7.4:1 on charcoal */
-  }
-
-  .lockup--lg .lockup__name {
-    font-size: 2.25rem;
+    margin-top: 0.15rem;
   }
 </style>

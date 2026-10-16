@@ -1,6 +1,6 @@
 ---
 import Icon from './Icon.astro';
-import Logo from './Logo.astro';
+import LogoIcon from './LogoIcon.astro';
 import { site } from '../config/site';
 ---
 
@@ -10,7 +10,7 @@ import { site } from '../config/site';
     <span class="empty__corner empty__corner--tr"></span>
     <span class="empty__corner empty__corner--bl"></span>
     <span class="empty__corner empty__corner--br"></span>
-    <Logo variant="full" height={170} class="empty__logo" />
+    <LogoIcon size={72} />
   </div>
   <div class="empty__text">
     <p class="empty__title">Τα πρώτα μας έργα ανεβαίνουν σύντομα</p>
@@ -47,9 +47,8 @@ import { site } from '../config/site';
     display: grid;
     place-items: center;
     aspect-ratio: 4 / 3;
-    color: var(--navy);
     background:
-      repeating-linear-gradient(-45deg, transparent 0 14px, rgb(28 28 28 / 0.045) 14px 15px),
+      repeating-linear-gradient(-45deg, transparent 0 14px, rgb(20 50 92 / 0.045) 14px 15px),
       var(--sand);
   }
 

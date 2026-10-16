@@ -7,7 +7,6 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "logo": "node scripts/build-logo.mjs",
     "icons": "node scripts/generate-icons.mjs",
     "check": "astro check"
   },
