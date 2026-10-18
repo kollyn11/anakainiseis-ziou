@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import Logo from './Logo.astro';
 import { site, links } from '../config/site';
 import { services } from '../data/services';
 ---
@@ -7,11 +8,8 @@ import { services } from '../data/services';
 <section class="hero on-navy" aria-labelledby="hero-title">
   <div class="hero__grid" aria-hidden="true"></div>
 
-  <!-- The logo's roofline + walls, at building scale. Drawn on once at load. -->
-  <svg class="hero__mark" viewBox="0 0 104 104" aria-hidden="true" focusable="false">
-    <path class="hero__walls" d="M32 54 L32 80 L72 80 L72 54" pathLength="1"></path>
-    <path class="hero__roof" d="M18 58 L52 28 L86 58" pathLength="1"></path>
-  </svg>
+  <!-- The runner from the logo, at building scale. Runs in once at load. -->
+  <Logo height={600} class="hero__mark" />
 
   <div class="container hero__inner">
     <h1 id="hero-title" class="hero__title">
@@ -73,49 +71,30 @@ import { services } from '../data/services';
     -webkit-mask-image: linear-gradient(to right, transparent 25%, #000 75%);
   }
 
-  .hero__mark {
+  /* The runner from the logo — white figure, orange cap — standing at the right of the copy. */
+  .hero :global(.hero__mark) {
     position: absolute;
     z-index: -1;
-    right: max(-8rem, calc((100vw - var(--max)) / 2 - 10rem));
-    bottom: -3.5rem;
-    width: clamp(26rem, 52vw, 50rem);
-    height: auto;
-    fill: none;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    overflow: visible;
-  }
-
-  .hero__roof {
-    stroke: var(--orange);
-    stroke-width: 10;
-  }
-
-  .hero__walls {
-    stroke: rgb(255 255 255 / 0.16);
-    stroke-width: 8;
+    right: max(1rem, calc((100vw - var(--max)) / 2));
+    bottom: 6.5rem;
+    width: auto;
+    height: clamp(20rem, 34vw, 31rem);
+    max-width: none;
+    color: var(--white);
+    opacity: 1;
+    pointer-events: none;
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .hero__roof,
-    .hero__walls {
-      stroke-dasharray: 1;
-      stroke-dashoffset: 1;
-      animation: draw 1400ms var(--ease-out) forwards;
-    }
-
-    .hero__roof {
-      animation-delay: 150ms;
-    }
-
-    .hero__walls {
-      animation-delay: 650ms;
+    .hero :global(.hero__mark) {
+      animation: run-in 1200ms var(--ease-out) 150ms backwards;
     }
   }
 
-  @keyframes draw {
-    to {
-      stroke-dashoffset: 0;
+  @keyframes run-in {
+    from {
+      opacity: 0;
+      transform: translateX(-3rem);
     }
   }
 
@@ -226,11 +205,8 @@ import { services } from '../data/services';
   }
 
   @media (max-width: 47.99rem) {
-    .hero__mark {
-      right: -7rem;
-      bottom: -2.5rem;
-      width: 19rem;
-      opacity: 0.3;
+    .hero :global(.hero__mark) {
+      display: none;
     }
 
     .hero__meta-sep,

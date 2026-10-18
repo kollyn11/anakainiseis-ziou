@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
+import Logo from '../components/Logo.astro';
 import { site, links } from '../config/site';
 ---
 
@@ -11,10 +12,7 @@ import { site, links } from '../config/site';
   noindex
 >
   <section class="nf on-navy">
-    <svg class="nf__mark" viewBox="0 0 104 104" aria-hidden="true" focusable="false">
-      <path d="M18 58 L52 28 L86 58" stroke="#E8662B" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
-      <path d="M32 54 L32 80 L60 80" stroke="rgb(255 255 255 / .18)" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 10"></path>
-    </svg>
+    <Logo height={540} class="nf__mark" />
     <div class="container nf__inner">
       <p class="nf__code" aria-hidden="true">404</p>
       <h1>Αυτή η σελίδα δεν έχει χτιστεί ακόμα.</h1>
@@ -35,13 +33,15 @@ import { site, links } from '../config/site';
     color: var(--navy-ink-soft);
   }
 
-  .nf__mark {
+  .nf :global(.nf__mark) {
     position: absolute;
-    right: -6rem;
-    bottom: -4rem;
-    width: clamp(20rem, 45vw, 40rem);
-    height: auto;
-    opacity: 0.9;
+    right: max(1rem, calc((100vw - var(--max)) / 2));
+    bottom: 3rem;
+    width: auto;
+    max-width: none;
+    height: clamp(16rem, 30vw, 26rem);
+    color: var(--white);
+    opacity: 1;
   }
 
   .nf__inner {

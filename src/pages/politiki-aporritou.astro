@@ -18,9 +18,10 @@ const updated = '16 Οκτωβρίου 2026';
 >
   <PageHeader
     title="Πολιτική απορρήτου"
-    lead={`Τελευταία ενημέρωση: ${updated}`}
     crumbs={[{ name: 'Αρχική', href: '/' }, { name: 'Πολιτική απορρήτου' }]}
-  />
+  >
+    <p class="updated">Τελευταία ενημέρωση: <time datetime="2026-10-16">{updated}</time></p>
+  </PageHeader>
 
   <section class="section section--white">
     <div class="container legal">
@@ -81,6 +82,11 @@ const updated = '16 Οκτωβρίου 2026';
 </Base>
 
 <style>
+  .updated {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
   .legal {
     max-width: 46rem;
   }

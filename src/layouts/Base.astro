@@ -90,6 +90,7 @@ const fallbackCss = fallbacks
 
     <link rel="preload" href={greek800} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={greek400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={latin400} as="font" type="font/woff2" crossorigin />
     <style set:html={fontCss + fallbackCss}></style>
     <script is:inline>document.documentElement.classList.add('js');</script>
 
@@ -126,6 +127,10 @@ const fallbackCss = fallbacks
     </main>
     <Footer />
     {!hideMobileBar && <MobileBar />}
+
+    <script>
+      import '../scripts/motion';
+    </script>
 
     <script>
       // Subtle fade-in for sections as they enter the viewport (skipped for reduced motion).

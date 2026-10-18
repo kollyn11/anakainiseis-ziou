@@ -22,7 +22,7 @@ const shown = all.slice(0, 6);
       ) : (
         <>
           <ul role="list" class="projects-grid">
-            {shown.map((project, i) => (
+            {shown.map((project) => (
               <li data-reveal>
                 <ProjectCard project={project} />
               </li>

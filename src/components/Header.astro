@@ -14,9 +14,9 @@ const nav = [
 
 <header class="header" data-header>
   <div class="header__inner container">
-    <Lockup />
+    <Lockup animated />
 
-    <nav class="header__nav" id="site-menu" aria-label="Κύρια πλοήγηση" data-menu>
+    <nav class="header__nav" id="site-menu" aria-label="Κύρια πλοήγηση" data-menu data-lenis-prevent>
       <ul role="list" class="header__links">
         {nav.map((item) => (
           <li><a href={item.href} data-menu-link>{item.label}</a></li>

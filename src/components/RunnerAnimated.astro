@@ -1,0 +1,68 @@
+---
+/**
+ * The runner logo as a rig the scroll animation can drive (src/scripts/runner.ts).
+ * Server-rendered in the drawn pose, so without JavaScript or with reduced motion
+ * it is identical to the static logo.
+ */
+import {
+  JOINTS,
+  LIMB,
+  limbs,
+  brush,
+  brushCuts,
+  drill,
+  drillCuts,
+  drillDot,
+  cap,
+  capCuts,
+  capSeams,
+} from '../assets/brand/runner-parts.mjs';
+
+interface Props {
+  height: number;
+  class?: string;
+}
+
+const { height, class: className } = Astro.props;
+
+// Slightly taller than the static logo's box: the body bobs up to ~25 units mid-stride.
+const VB = { x: 40, y: -10, w: 1240, h: 1660 };
+const width = Math.round((height * VB.w) / VB.h);
+const uid = Math.random().toString(36).slice(2, 8);
+const ids = { cap: `rc-${uid}`, drill: `rd-${uid}`, brush: `rb-${uid}` };
+const mask = (id: string, cuts: string) =>
+  `<mask id="${id}" maskUnits="userSpaceOnUse" x="-400" y="-400" width="2200" height="2500"><rect x="-400" y="-400" width="2200" height="2500" fill="#fff"/><g fill="#000" stroke="#000">${cuts}</g></mask>`;
+const H = JOINTS.head;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox={`${VB.x} ${VB.y} ${VB.w} ${VB.h}`}
+  width={width}
+  height={height}
+  class={className}
+  aria-hidden="true"
+  focusable="false"
+  data-runner
+>
+  <defs set:html={mask(ids.cap, capCuts) + mask(ids.drill, drillCuts) + mask(ids.brush, brushCuts)} />
+  <g data-runner-body>
+    <g fill="none" stroke="currentColor" stroke-width={LIMB} stroke-linecap="round" stroke-linejoin="round">
+      <path d={limbs.rearLeg} data-limb="rearLeg"></path>
+      <path d={limbs.backArm} data-limb="backArm"></path>
+      <path d={limbs.torso}></path>
+      <path d={limbs.frontLeg} data-limb="frontLeg"></path>
+      <path d={limbs.frontArm} data-limb="frontArm"></path>
+    </g>
+    <g data-tool="backArm">
+      <g fill="currentColor" mask={`url(#${ids.drill})`} set:html={drill} />
+      <g fill="currentColor" set:html={drillDot} />
+    </g>
+    <g data-tool="frontArm">
+      <g fill="currentColor" mask={`url(#${ids.brush})`} set:html={brush} />
+    </g>
+    <circle cx={H.x} cy={H.y} r={H.r} fill="currentColor"></circle>
+    <g mask={`url(#${ids.cap})`} set:html={cap} />
+    <g set:html={capSeams} />
+  </g>
+</svg>

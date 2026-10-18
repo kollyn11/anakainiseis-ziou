@@ -364,6 +364,11 @@ html {
   }
 }
 
+/* Lenis drives smooth scrolling when JS runs; native smooth scroll stays as the no-JS fallback. */
+html.lenis {
+  scroll-behavior: auto;
+}
+
 /* ---------- Mobile bottom bar spacing ---------- */
 @media (max-width: 47.99rem) {
   body {

@@ -1,29 +1,35 @@
 ---
 /**
- * Brand lockup: icon + (wordmark stacked over the "ΑΝΑΚΑΙΝΙΣΕΙΣ" tagline).
- * `dark` switches to the inverse icon and white letters for navy backgrounds.
+ * Brand lockup: runner + "ΖΙΟΥ" stacked over "ΑΝΑΚΑΙΝΙΣΕΙΣ".
+ * `dark` = for dark backgrounds (white runner and name).
+ * `animated` = the runner is the scroll-driven rig (header only; see src/scripts/runner.ts).
+ * The orange "ΑΝΑΚΑΙΝΙΣΕΙΣ" is drawn as logo artwork (outlined), not live text.
  */
-import LogoIcon from './LogoIcon.astro';
-import Wordmark from './Wordmark.astro';
-import { site } from '../config/site';
+import Logo from './Logo.astro';
+import RunnerAnimated from './RunnerAnimated.astro';
 import { tagline } from '../assets/brand/tagline';
 
 interface Props {
   dark?: boolean;
   href?: string;
   size?: 'md' | 'lg';
+  animated?: boolean;
 }
-const { dark = false, href = '/', size = 'md' } = Astro.props;
-const iconSize = size === 'lg' ? 64 : 46;
-const wordHeight = size === 'lg' ? 52 : 38;
-// Tagline outline is drawn at 100px font size; scale to ~10px (md) or ~13px (lg).
-const tagScale = size === 'lg' ? 0.13 : 0.1;
+const { dark = false, href = '/', size = 'md', animated = false } = Astro.props;
+const h = size === 'lg' ? 64 : 50;
+const tagScale = size === 'lg' ? 0.11 : 0.088;
 ---
 
-<a href={href} class:list={['lockup', `lockup--${size}`, { 'lockup--dark': dark }]} aria-label={`${site.name} — αρχική σελίδα`}>
-  <LogoIcon inverse={dark} size={iconSize} class="lockup__icon" />
+<a href={href} class:list={['lockup', `lockup--${size}`, { 'lockup--dark': dark }]}>
+  {
+    animated ? (
+      <RunnerAnimated height={Math.round(h * 1.02)} class="lockup__figure" />
+    ) : (
+      <Logo height={h} class="lockup__figure" />
+    )
+  }
   <span class="lockup__text">
-    <Wordmark height={wordHeight} class="lockup__word" />
+    <span class="lockup__name">ΖΙΟΥ</span>
     <svg
       class="lockup__tag"
       viewBox={`0 0 ${tagline.width} ${tagline.height}`}
@@ -34,6 +40,7 @@ const tagScale = size === 'lg' ? 0.13 : 0.1;
     >
       <path d={tagline.d} fill="#E8662B"></path>
     </svg>
+    <span class="visually-hidden">Ανακαινίσεις — αρχική σελίδα</span>
   </span>
 </a>
 
@@ -41,7 +48,7 @@ const tagScale = size === 'lg' ? 0.13 : 0.1;
   .lockup {
     display: inline-flex;
     align-items: center;
-    gap: 0.7rem;
+    gap: 0.55rem;
     color: var(--navy);
     text-decoration: none;
     flex: none;
@@ -51,20 +58,25 @@ const tagScale = size === 'lg' ? 0.13 : 0.1;
     color: var(--white);
   }
 
-  :global(.lockup__icon) {
+  .lockup :global(.lockup__figure) {
     flex: none;
+    overflow: visible;
   }
 
   .lockup__text {
     display: grid;
-    gap: 0.15rem;
+    gap: 0.3rem;
   }
 
-  :global(.lockup__word) {
-    height: auto;
+  .lockup__name {
+    font-size: 1.75rem;
+    font-weight: 800;
+    font-style: italic;
+    letter-spacing: 0.04em;
+    line-height: 0.9;
   }
 
-  .lockup__tag {
-    margin-top: 0.15rem;
+  .lockup--lg .lockup__name {
+    font-size: 2.25rem;
   }
 </style>
