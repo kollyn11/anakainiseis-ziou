@@ -1,98 +1,118 @@
 ---
 /**
- * Work photos in the projects section: complete before/after pairs side by side
- * (ΠΡΙΝ / ΜΕΤΑ badges as an HTML overlay; the image files are never edited),
- * then every other photo without a label. Pairing rules: src/lib/work-photos.ts.
+ * Work photos in the projects section, as a carousel: one slide at a time, changed with
+ * the ← → buttons, swipe, or the keyboard arrows. Each complete before/after pair is one slide
+ * (ΠΡΙΝ left, ΜΕΤΑ right, badges as an HTML overlay — the image files are never edited);
+ * every other photo gets its own slide without a label. Pairing rules: src/lib/work-photos.ts.
  */
 import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
 import type { WorkPhoto } from '../lib/work-photos';
 import { getWorkPhotos } from '../lib/work-photos';
 
 const { pairs, singles } = getWorkPhotos();
-const pairSizes = '(min-width: 76rem) 18rem, (min-width: 48rem) 23vw, 46vw';
-const singleSizes = '(min-width: 76rem) 24rem, (min-width: 48rem) 31vw, 92vw';
+type Slide = { caption: string; photos: [WorkPhoto, 'before' | 'after' | null][] };
+const slides: Slide[] = [
+  ...pairs.map((p) => ({ caption: p.category, photos: [[p.before, 'before'], [p.after, 'after']] as Slide['photos'] })),
+  ...singles.map((s) => ({ caption: s.category, photos: [[s, null]] as Slide['photos'] })),
+];
+const total = slides.length;
+const sizes = '(min-width: 60rem) 28rem, 46vw';
 ---
 
 {
-  pairs.length > 0 && (
-    <ul role="list" class="work-pairs">
-      {pairs.map((pair) => (
-        <li data-reveal>
-          <figure class="work-pair">
-            <div class="work-pair__images">
-              {([['before', pair.before], ['after', pair.after]] as [string, WorkPhoto][]).map(([kind, photo]) => (
+  total > 0 && (
+    <div class="carousel" role="region" aria-roledescription="carousel" aria-label="Φωτογραφίες από έργα μας" data-carousel>
+      <div class="carousel__track" tabindex="0" aria-label="Φωτογραφίες — αλλάξτε με τα βελάκια" data-track data-lenis-prevent-horizontal>
+        {slides.map((slide, i) => (
+          <div
+            class="carousel__slide"
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${i + 1} από ${total}: ${slide.caption}`}
+            data-slide
+            data-caption={slide.caption}
+          >
+            <div class:list={['carousel__photos', { 'carousel__photos--single': slide.photos.length === 1 }]}>
+              {slide.photos.map(([photo, kind]) => (
                 <div class="work-photo">
                   <Picture
                     src={photo.image}
                     alt={photo.alt}
                     formats={['avif', 'webp']}
-                    widths={[320, 480, 720]}
-                    sizes={pairSizes}
+                    widths={[320, 480, 720, 960]}
+                    sizes={sizes}
                     loading="lazy"
-                    class="work-photo__img"
                   />
-                  <span class:list={['work-badge', `work-badge--${kind}`]} aria-hidden="true">
-                    {kind === 'before' ? 'ΠΡΙΝ' : 'ΜΕΤΑ'}
-                  </span>
+                  {kind && (
+                    <span class:list={['work-badge', `work-badge--${kind}`]} aria-hidden="true">
+                      {kind === 'before' ? 'ΠΡΙΝ' : 'ΜΕΤΑ'}
+                    </span>
+                  )}
                 </div>
               ))}
             </div>
-            <figcaption>{pair.category}</figcaption>
-          </figure>
-        </li>
-      ))}
-    </ul>
-  )
-}
+          </div>
+        ))}
+      </div>
 
-{
-  singles.length > 0 && (
-    <ul role="list" class="work-singles">
-      {singles.map((photo) => (
-        <li data-reveal>
-          <figure class="work-single">
-            <div class="work-photo">
-              <Picture
-                src={photo.image}
-                alt={photo.alt}
-                formats={['avif', 'webp']}
-                widths={[360, 560, 800]}
-                sizes={singleSizes}
-                loading="lazy"
-                class="work-photo__img"
-              />
-            </div>
-            <figcaption>{photo.category}</figcaption>
-          </figure>
-        </li>
-      ))}
-    </ul>
+      <div class="carousel__controls">
+        <button type="button" class="carousel__btn" data-prev aria-label="Προηγούμενη φωτογραφία" disabled>
+          <Icon name="arrowLeft" size={24} />
+        </button>
+        <p class="carousel__status" aria-live="polite" data-status>
+          <span class="carousel__count"><span data-index>1</span> / {total}</span>
+          <span class="carousel__caption" data-caption-out>{slides[0].caption}</span>
+        </p>
+        <button type="button" class="carousel__btn" data-next aria-label="Επόμενη φωτογραφία" disabled={total < 2}>
+          <Icon name="arrow" size={24} />
+        </button>
+      </div>
+    </div>
   )
 }
 
 <style>
-  .work-pairs {
-    display: grid;
-    gap: var(--s-4) var(--s-3);
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 32rem), 1fr));
+  /* Width capped so photos + arrows fit in one screen: each photo is 3:4, two side by side */
+  .carousel {
+    max-width: min(58rem, calc((100svh - 13rem) * 1.5));
   }
 
-  .work-singles {
-    display: grid;
-    gap: var(--s-3);
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
-    margin-top: var(--s-5);
+  /* Native horizontal scroll with snapping: swipe works on touch, buttons scroll by one slide */
+  .carousel__track {
+    display: flex;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    border-radius: var(--radius);
   }
 
-  .work-pair,
-  .work-single {
-    margin: 0;
+  .carousel__track::-webkit-scrollbar {
+    display: none;
   }
 
-  .work-pair__images {
+  .carousel__track:focus-visible {
+    outline: 3px solid var(--orange);
+    outline-offset: 4px;
+  }
+
+  .carousel__slide {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .carousel__photos {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* before on the left, after on the right — on every screen size */
+    grid-template-columns: 1fr 1fr; /* ΠΡΙΝ left, ΜΕΤΑ right — on every screen size */
     gap: 0.5rem;
+  }
+
+  .carousel__photos--single {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: calc(50% - 0.25rem);
+    margin-inline: auto;
   }
 
   /* Image wrapper: the badge is positioned against it */
@@ -104,7 +124,6 @@ const singleSizes = '(min-width: 76rem) 24rem, (min-width: 48rem) 31vw, 92vw';
     background: var(--sand);
   }
 
-  /* Fill the 3:4 frame whatever the photo's own proportions */
   .work-photo :global(picture),
   .work-photo :global(img) {
     position: absolute;
@@ -118,11 +137,63 @@ const singleSizes = '(min-width: 76rem) 24rem, (min-width: 48rem) 31vw, 92vw';
     object-fit: cover;
   }
 
-  figcaption {
-    margin-top: 0.6rem;
+  /* ---------- controls ---------- */
+  .carousel__controls {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    margin-top: var(--s-2);
+  }
+
+  .carousel__btn {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 3rem;
+    height: 3rem;
+    border: 2px solid var(--navy);
+    border-radius: var(--radius);
+    background: var(--navy);
+    color: var(--white);
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out), opacity 160ms var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .carousel__btn:not(:disabled):hover {
+      background: var(--orange);
+      border-color: var(--orange);
+      color: var(--navy);
+    }
+  }
+
+  .carousel__btn:disabled {
+    background: transparent;
     color: var(--navy);
-    font-size: 1rem;
-    font-weight: 700;
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .carousel__status {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0 0.75rem;
+    text-align: center;
+  }
+
+  .carousel__count {
+    color: var(--navy);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .carousel__caption {
+    color: var(--graphite);
+    font-weight: 500;
   }
 
   /* ---------- ΠΡΙΝ / ΜΕΤΑ badge ---------- */
@@ -133,7 +204,7 @@ const singleSizes = '(min-width: 76rem) 24rem, (min-width: 48rem) 31vw, 92vw';
     padding: 6px 12px;
     border-radius: 6px;
     font-family: var(--font);
-    font-size: 14px;
+    font-size: 19px; /* 19px bold = WCAG "large text": navy on orange passes AA */
     font-weight: 700;
     letter-spacing: 0.08em;
     line-height: 1.2;
@@ -155,8 +226,77 @@ const singleSizes = '(min-width: 76rem) 24rem, (min-width: 48rem) 31vw, 92vw';
     .work-badge {
       top: 8px;
       right: 8px;
-      padding: 4px 8px;
-      font-size: 12px;
+      padding: 4px 9px;
+      font-size: 19px;
     }
   }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((root) => {
+    const track = root.querySelector<HTMLElement>('[data-track]')!;
+    const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-slide]'));
+    const prev = root.querySelector<HTMLButtonElement>('[data-prev]')!;
+    const next = root.querySelector<HTMLButtonElement>('[data-next]')!;
+    const indexOut = root.querySelector<HTMLElement>('[data-index]')!;
+    const captionOut = root.querySelector<HTMLElement>('[data-caption-out]')!;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+    let current = 0;
+
+    const show = (i: number) => {
+      current = i;
+      indexOut.textContent = String(i + 1);
+      captionOut.textContent = slides[i].dataset.caption ?? '';
+      // Reaching an end disables that arrow; keep keyboard focus on the other one instead of losing it
+      const focusedPrev = document.activeElement === prev;
+      const focusedNext = document.activeElement === next;
+      prev.disabled = i === 0;
+      next.disabled = i === slides.length - 1;
+      if (focusedNext && next.disabled) prev.focus();
+      if (focusedPrev && prev.disabled) next.focus();
+      // Off-screen slides are hidden from screen readers and the tab order
+      slides.forEach((s, j) => s.toggleAttribute('inert', j !== i));
+    };
+
+    // While an arrow/keyboard move is gliding, the scroll position passes through other slides;
+    // `pending` holds the requested slide so in-between positions don't overwrite it (rapid taps add up correctly).
+    let pending: number | null = null;
+    let pendingTimer = 0;
+
+    const go = (i: number) => {
+      const target = Math.max(0, Math.min(slides.length - 1, i));
+      pending = target;
+      clearTimeout(pendingTimer);
+      pendingTimer = window.setTimeout(() => (pending = null), 1200); // safety net if the glide is interrupted
+      track.scrollTo({ left: target * track.clientWidth, behavior: reduce.matches ? 'auto' : 'smooth' });
+      show(target);
+    };
+
+    prev.addEventListener('click', () => go(current - 1));
+    next.addEventListener('click', () => go(current + 1));
+    track.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(current - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(current + 1); }
+    });
+
+    // Keep the counter in sync with swipes / trackpad scrolling
+    let raf = 0;
+    track.addEventListener('scroll', () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        if (pending !== null) {
+          // Programmatic glide in progress: wait until it lands on the requested slide
+          if (Math.abs(track.scrollLeft - pending * track.clientWidth) < 2) pending = null;
+          return;
+        }
+        const i = Math.round(track.scrollLeft / track.clientWidth);
+        if (i !== current) show(i);
+      });
+    }, { passive: true });
+
+    // Stay on the same slide when the layout width changes
+    new ResizeObserver(() => track.scrollTo({ left: current * track.clientWidth })).observe(track);
+
+    show(0);
+  });
+</script>
