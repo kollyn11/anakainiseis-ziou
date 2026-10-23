@@ -2,10 +2,14 @@
 import ProjectCard from './ProjectCard.astro';
 import ProjectsEmpty from './ProjectsEmpty.astro';
 import Icon from './Icon.astro';
+import WorkPhotos from './WorkPhotos.astro';
 import { getProjects } from '../lib/projects';
+import { getWorkPhotos } from '../lib/work-photos';
 
 const all = await getProjects();
 const shown = all.slice(0, 6);
+const work = getWorkPhotos();
+const hasWork = work.pairs.length + work.singles.length > 0;
 ---
 
 <section id="projects" class="section section--sand-dark" aria-labelledby="projects-title">
@@ -17,9 +21,7 @@ const shown = all.slice(0, 6);
     </header>
 
     {
-      shown.length === 0 ? (
-        <ProjectsEmpty />
-      ) : (
+      shown.length > 0 && (
         <>
           <ul role="list" class="projects-grid">
             {shown.map((project) => (
@@ -28,17 +30,19 @@ const shown = all.slice(0, 6);
               </li>
             ))}
           </ul>
-          {all.length > 0 && (
-            <p class="projects-more">
-              <a class="btn btn--secondary" href="/erga/">
-                Όλα τα έργα
-                <Icon name="arrow" />
-              </a>
-            </p>
-          )}
+          <p class="projects-more">
+            <a class="btn btn--secondary" href="/erga/">
+              Όλα τα έργα
+              <Icon name="arrow" />
+            </a>
+          </p>
         </>
       )
     }
+
+    {hasWork && <WorkPhotos />}
+
+    {shown.length === 0 && !hasWork && <ProjectsEmpty />}
   </div>
 </section>
 
@@ -54,6 +58,6 @@ const shown = all.slice(0, 6);
   }
 
   .projects-more {
-    margin-top: var(--s-5);
+    margin-block: var(--s-5);
   }
 </style>

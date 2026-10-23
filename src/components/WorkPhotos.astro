@@ -1,0 +1,162 @@
+---
+/**
+ * Work photos in the projects section: complete before/after pairs side by side
+ * (ΠΡΙΝ / ΜΕΤΑ badges as an HTML overlay; the image files are never edited),
+ * then every other photo without a label. Pairing rules: src/lib/work-photos.ts.
+ */
+import { Picture } from 'astro:assets';
+import type { WorkPhoto } from '../lib/work-photos';
+import { getWorkPhotos } from '../lib/work-photos';
+
+const { pairs, singles } = getWorkPhotos();
+const pairSizes = '(min-width: 76rem) 18rem, (min-width: 48rem) 23vw, 46vw';
+const singleSizes = '(min-width: 76rem) 24rem, (min-width: 48rem) 31vw, 92vw';
+---
+
+{
+  pairs.length > 0 && (
+    <ul role="list" class="work-pairs">
+      {pairs.map((pair) => (
+        <li data-reveal>
+          <figure class="work-pair">
+            <div class="work-pair__images">
+              {([['before', pair.before], ['after', pair.after]] as [string, WorkPhoto][]).map(([kind, photo]) => (
+                <div class="work-photo">
+                  <Picture
+                    src={photo.image}
+                    alt={photo.alt}
+                    formats={['avif', 'webp']}
+                    widths={[320, 480, 720]}
+                    sizes={pairSizes}
+                    loading="lazy"
+                    class="work-photo__img"
+                  />
+                  <span class:list={['work-badge', `work-badge--${kind}`]} aria-hidden="true">
+                    {kind === 'before' ? 'ΠΡΙΝ' : 'ΜΕΤΑ'}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <figcaption>{pair.category}</figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+{
+  singles.length > 0 && (
+    <ul role="list" class="work-singles">
+      {singles.map((photo) => (
+        <li data-reveal>
+          <figure class="work-single">
+            <div class="work-photo">
+              <Picture
+                src={photo.image}
+                alt={photo.alt}
+                formats={['avif', 'webp']}
+                widths={[360, 560, 800]}
+                sizes={singleSizes}
+                loading="lazy"
+                class="work-photo__img"
+              />
+            </div>
+            <figcaption>{photo.category}</figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .work-pairs {
+    display: grid;
+    gap: var(--s-4) var(--s-3);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 32rem), 1fr));
+  }
+
+  .work-singles {
+    display: grid;
+    gap: var(--s-3);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+    margin-top: var(--s-5);
+  }
+
+  .work-pair,
+  .work-single {
+    margin: 0;
+  }
+
+  .work-pair__images {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* before on the left, after on the right — on every screen size */
+    gap: 0.5rem;
+  }
+
+  /* Image wrapper: the badge is positioned against it */
+  .work-photo {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--sand);
+  }
+
+  /* Fill the 3:4 frame whatever the photo's own proportions */
+  .work-photo :global(picture),
+  .work-photo :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+  }
+
+  .work-photo :global(img) {
+    object-fit: cover;
+  }
+
+  figcaption {
+    margin-top: 0.6rem;
+    color: var(--navy);
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  /* ---------- ΠΡΙΝ / ΜΕΤΑ badge ---------- */
+  .work-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+
+  .work-badge--before {
+    background: var(--navy); /* #14325C */
+    color: var(--white);
+  }
+
+  .work-badge--after {
+    background: var(--orange); /* #E8662B */
+    color: var(--navy); /* #14325C */
+  }
+
+  @media (max-width: 30rem) {
+    .work-badge {
+      top: 8px;
+      right: 8px;
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+  }
+</style>
